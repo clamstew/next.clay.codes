@@ -1,23 +1,35 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { goSiteToCommands, terminalCommands, allCommands } from "./constants";
 
+interface CommandHistoryItem {
+  command: string;
+  output: string;
+}
+
 function App() {
-  const commandPromptRef = useRef(null);
+  const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
   const [commandError, setCommandError] = useState("");
   const [commandOutput, setCommandOutput] = useState("");
-  const [commandHistory, setCommandHistory] = useState([]);
+  const [commandHistory, setCommandHistory] = useState<CommandHistoryItem[]>(
+    []
+  );
 
   const runCommand = useCallback(
-    (command) => {
+    (command: string) => {
       // console.warn("command running...", command);
       let output = "";
-      if (goSiteToCommands[command]) {
-        output = `Opening site: ${goSiteToCommands[command]}`;
+      if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
+        output = `Opening site: ${
+          goSiteToCommands[command as keyof typeof goSiteToCommands]
+        }`;
         setCommandOutput(output);
         // delay for a hot second, so user can see the output
         setTimeout(() => {
-          window.open(goSiteToCommands[command], "_blank");
+          window.open(
+            goSiteToCommands[command as keyof typeof goSiteToCommands],
+            "_blank"
+          );
         }, 600);
       } else if (command === terminalCommands.history) {
         // print history
@@ -38,17 +50,24 @@ function App() {
 
   useEffect(() => {
     const currentCommandPromptRef = commandPromptRef.current;
+    if (!currentCommandPromptRef) return;
+
     // https://stackoverflow.com/questions/53314857/how-to-focus-something-on-next-render-with-react-hooks
     currentCommandPromptRef.focus();
 
     const runCommandAlias = runCommand;
 
-    const keyUpEventListener = (event) => {
-      // console.warn("what am i typing:", event.target.value);
+    const keyUpEventListener = (event: KeyboardEvent) => {
+      if (process.env.NODE_ENV === "development") {
+        console.warn(
+          "what am i typing:",
+          (event.target as HTMLInputElement).value
+        );
+      }
       // will run command highlighting here
     };
 
-    const keyDownEventListener = (event) => {
+    const keyDownEventListener = (event: KeyboardEvent) => {
       // https://stackoverflow.com/questions/47809282/submit-a-form-when-enter-is-pressed-in-a-textarea-in-react?rq=1
       // console.warn("what keycode", event.which);
       if (event.which === 27 && event.shiftKey === false) {
@@ -116,22 +135,40 @@ function App() {
     return cmd.match(regex);
   });
 
-  const tryAgain = (e) => {
+  const tryAgain = () => {
     setCommand("");
     setCommandError("");
     setCommandOutput("");
-    commandPromptRef.current.value = "";
+    if (commandPromptRef.current) {
+      commandPromptRef.current.value = "";
+    }
   };
 
-  const CommandExample = ({ cmd }) => (
-    <li
-      style={{ cursor: "pointer" }}
-      onClick={() => {
-        setCommand(cmd);
-        commandPromptRef.current.value = cmd;
-      }}
-    >
-      {cmd}
+  interface CommandExampleProps {
+    cmd: string;
+  }
+
+  const CommandExample = ({ cmd }: CommandExampleProps) => (
+    <li>
+      <button
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          setCommand(cmd);
+          if (commandPromptRef.current) {
+            commandPromptRef.current.value = cmd;
+          }
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            setCommand(cmd);
+            if (commandPromptRef.current) {
+              commandPromptRef.current.value = cmd;
+            }
+          }
+        }}
+      >
+        {cmd}
+      </button>
     </li>
   );
 
