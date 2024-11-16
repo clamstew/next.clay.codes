@@ -5,7 +5,8 @@ export const meta: MetaFunction = () => {
     { title: "clay.codes" },
     {
       name: "description",
-      content: "Slowly building a computer online, I guess. 🤷‍♂️",
+      content:
+        "Slowly building an online web computer about myself and interests, I guess. 🤷‍♂️",
     },
   ];
 };
