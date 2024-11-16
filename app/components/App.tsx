@@ -4,6 +4,7 @@ import { getMatchingCommands } from "../shared/utils/commands-utils";
 import { CommandInput } from "../sections/Home/components/CommandInput";
 import { CommandSuggestions } from "../sections/Home/components/CommandSuggestions";
 import { CommandOutput } from "../sections/Home/components/CommandOutput";
+import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommandOutput";
 interface CommandHistoryItem {
   command: string;
   output: string;
@@ -147,19 +148,11 @@ function App() {
       )}
 
       {matchingCommandTyped && (
-        <div>
-          <span>Press</span>{" "}
-          <button
-            onClick={() => runCommand(command)}
-            className="bg-[#282c34] border border-white text-white rounded-[5px] text-[18px] cursor-pointer hover:shadow-[0_0_0_2px_white]"
-          >
-            Enter
-          </button>{" "}
-          <span>or</span>{" "}
-          <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
-            Try again.
-          </a>
-        </div>
+        <MatchedCommandOutput
+          command={command}
+          runCommand={runCommand}
+          tryAgain={tryAgain}
+        />
       )}
     </div>
   );
