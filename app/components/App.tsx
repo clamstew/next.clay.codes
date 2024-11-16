@@ -1,10 +1,135 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { goSiteToCommands, terminalCommands, allCommands } from "./constants";
 import { getMatchingCommands } from "../shared/utils/commands-utils";
+
 interface CommandHistoryItem {
   command: string;
   output: string;
 }
+
+interface CommandExampleProps {
+  cmd: string;
+  setCommand: (cmd: string) => void;
+  commandPromptRef: React.RefObject<HTMLInputElement>;
+}
+
+const CommandExample = ({
+  cmd,
+  setCommand,
+  commandPromptRef,
+}: CommandExampleProps) => (
+  <li>
+    <button
+      style={{ cursor: "pointer" }}
+      onClick={() => {
+        setCommand(cmd);
+        if (commandPromptRef.current) {
+          commandPromptRef.current.value = cmd;
+        }
+      }}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          setCommand(cmd);
+          if (commandPromptRef.current) {
+            commandPromptRef.current.value = cmd;
+          }
+        }
+      }}
+    >
+      {cmd}
+    </button>
+  </li>
+);
+
+interface CommandInputProps {
+  commandPromptRef: React.RefObject<HTMLInputElement>;
+  setCommand: (value: string) => void;
+}
+
+const CommandInput = ({ commandPromptRef, setCommand }: CommandInputProps) => (
+  <div className="flex items-center">
+    <div className="inline-block text-white text-[40px]">$&gt;</div>
+    <input
+      ref={commandPromptRef}
+      spellCheck="false"
+      autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
+      onChange={(e) => setCommand(e.target.value)}
+      placeholder="run a command ..."
+      className="inline-block bg-[#282c34] text-white border-none outline-none w-[500px] h-[46px] text-[30px] md:max-w-[94%]"
+    />
+  </div>
+);
+
+interface CommandOutputProps {
+  error: string;
+  output: string;
+}
+
+const CommandOutput = ({ error, output }: CommandOutputProps) => (
+  <>
+    {error && (
+      <div className="text-red-500 text-left w-[548px] mb-[30px]">{error}</div>
+    )}
+    {output && (
+      <div
+        className="text-green-500 text-left w-[548px] mb-[30px]"
+        dangerouslySetInnerHTML={{ __html: output }}
+      />
+    )}
+  </>
+);
+
+interface CommandSuggestionsProps {
+  matchingCommands: string[];
+  command: string;
+  tryAgain: () => void;
+  setCommand: (cmd: string) => void;
+  commandPromptRef: React.RefObject<HTMLInputElement>;
+}
+
+const CommandSuggestions = ({
+  matchingCommands,
+  command,
+  tryAgain,
+  setCommand,
+  commandPromptRef,
+}: CommandSuggestionsProps) => (
+  <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]">
+    {matchingCommands.length > 0 && <div>Commands to try:</div>}
+    {matchingCommands.length === 0 && (
+      <div>
+        No matching commands.{" "}
+        <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
+          Try again.
+        </a>
+      </div>
+    )}
+    <div className="columns-2 mt-[20px]">
+      <ul className="m-0">
+        {command === "" &&
+          allCommands.map((cmd) => (
+            <CommandExample
+              key={cmd}
+              cmd={cmd}
+              setCommand={setCommand}
+              commandPromptRef={commandPromptRef}
+            />
+          ))}
+        {command !== "" &&
+          matchingCommands.map((cmd) => (
+            <CommandExample
+              key={cmd}
+              cmd={cmd}
+              setCommand={setCommand}
+              commandPromptRef={commandPromptRef}
+            />
+          ))}
+      </ul>
+    </div>
+  </div>
+);
 
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
@@ -17,7 +142,6 @@ function App() {
 
   const runCommand = useCallback(
     (command: string) => {
-      // console.warn("command running...", command);
       let output = "";
       if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
         output = `Opening site: ${
@@ -52,7 +176,6 @@ function App() {
     const currentCommandPromptRef = commandPromptRef.current;
     if (!currentCommandPromptRef) return;
 
-    // https://stackoverflow.com/questions/53314857/how-to-focus-something-on-next-render-with-react-hooks
     currentCommandPromptRef.focus();
 
     const runCommandAlias = runCommand;
@@ -64,7 +187,7 @@ function App() {
           (event.target as HTMLInputElement).value
         );
       }
-      // will run command highlighting here
+      // TODO: will run command highlighting here
     };
 
     const keyDownEventListener = (event: KeyboardEvent) => {
@@ -89,7 +212,6 @@ function App() {
     currentCommandPromptRef.addEventListener("keyup", keyUpEventListener);
     currentCommandPromptRef.addEventListener("keydown", keyDownEventListener);
 
-    // Remove event listener on cleanup
     return () => {
       currentCommandPromptRef.removeEventListener("keyup", keyUpEventListener);
       currentCommandPromptRef.removeEventListener(
@@ -104,11 +226,6 @@ function App() {
     allCommands
   );
 
-  console.warn(
-    "commandsThatMatchPartialCommand",
-    commandsThatMatchPartialCommand
-  );
-
   const tryAgain = () => {
     setCommand("");
     setCommandError("");
@@ -117,34 +234,6 @@ function App() {
       commandPromptRef.current.value = "";
     }
   };
-
-  interface CommandExampleProps {
-    cmd: string;
-  }
-
-  const CommandExample = ({ cmd }: CommandExampleProps) => (
-    <li>
-      <button
-        style={{ cursor: "pointer" }}
-        onClick={() => {
-          setCommand(cmd);
-          if (commandPromptRef.current) {
-            commandPromptRef.current.value = cmd;
-          }
-        }}
-        onKeyDown={(e) => {
-          if (e.key === "Enter" || e.key === " ") {
-            setCommand(cmd);
-            if (commandPromptRef.current) {
-              commandPromptRef.current.value = cmd;
-            }
-          }
-        }}
-      >
-        {cmd}
-      </button>
-    </li>
-  );
 
   const matchingCommandTyped =
     commandsThatMatchPartialCommand.length === 1 &&
@@ -158,61 +247,24 @@ function App() {
         </code>
 
         <div
-          className={`flex items-center ${
-            commandOutput || commandError ? "mt-[50px]" : "my-[50px]"
-          }`}
+          className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
         >
-          <div className="inline-block text-white text-[40px]">$&gt;</div>
-          <input
-            ref={commandPromptRef}
-            spellCheck="false"
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            onChange={(e) => setCommand(e.target.value)}
-            placeholder="run a command ..."
-            className="inline-block bg-[#282c34] text-white border-none outline-none w-[500px] h-[46px] text-[30px] md:max-w-[94%]"
+          <CommandInput
+            commandPromptRef={commandPromptRef}
+            setCommand={setCommand}
           />
         </div>
 
-        {commandError && (
-          <div className="text-red-500 text-left w-[548px] mb-[30px]">
-            {commandError}
-          </div>
-        )}
-        {commandOutput && (
-          <div
-            className="text-green-500 text-left w-[548px] mb-[30px]"
-            dangerouslySetInnerHTML={{ __html: commandOutput }}
-          />
-        )}
+        <CommandOutput error={commandError} output={commandOutput} />
 
-        {matchingCommandTyped || (
-          <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]">
-            {commandsThatMatchPartialCommand.length > 0 && (
-              <div>Commands to try:</div>
-            )}
-            {commandsThatMatchPartialCommand.length === 0 && (
-              <div>
-                No matching commands.{" "}
-                <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
-                  Try again.
-                </a>
-              </div>
-            )}
-            <div className="columns-2 mt-[20px]">
-              <ul className="m-0">
-                {command === "" &&
-                  allCommands.map((cmd) => (
-                    <CommandExample key={cmd} cmd={cmd} />
-                  ))}
-                {command !== "" &&
-                  commandsThatMatchPartialCommand.map((cmd) => (
-                    <CommandExample key={cmd} cmd={cmd} />
-                  ))}
-              </ul>
-            </div>
-          </div>
+        {!matchingCommandTyped && (
+          <CommandSuggestions
+            matchingCommands={commandsThatMatchPartialCommand}
+            command={command}
+            tryAgain={tryAgain}
+            setCommand={setCommand}
+            commandPromptRef={commandPromptRef}
+          />
         )}
 
         {matchingCommandTyped && (
