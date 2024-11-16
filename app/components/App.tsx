@@ -123,44 +123,44 @@ function App() {
         <code className="text-[40px] font-normal select-none text-[rgb(0, 255, 255)]">
           &lt;clay.codes /&gt;
         </code>
-
-        <div
-          className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
-        >
-          <CommandInput
-            commandPromptRef={commandPromptRef}
-            setCommand={setCommand}
-          />
-        </div>
-
-        <CommandOutput error={commandError} output={commandOutput} />
-
-        {!matchingCommandTyped && (
-          <CommandSuggestions
-            matchingCommands={commandsThatMatchPartialCommand}
-            command={command}
-            tryAgain={tryAgain}
-            setCommand={setCommand}
-            commandPromptRef={commandPromptRef}
-          />
-        )}
-
-        {matchingCommandTyped && (
-          <div>
-            <span>Press</span>{" "}
-            <button
-              onClick={() => runCommand(command)}
-              className="bg-[#282c34] border border-white text-white rounded-[5px] text-[18px] cursor-pointer hover:shadow-[0_0_0_2px_white]"
-            >
-              Enter
-            </button>{" "}
-            <span>or</span>{" "}
-            <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
-              Try again.
-            </a>
-          </div>
-        )}
       </header>
+
+      <div
+        className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
+      >
+        <CommandInput
+          commandPromptRef={commandPromptRef}
+          setCommand={setCommand}
+        />
+      </div>
+
+      <CommandOutput error={commandError} output={commandOutput} />
+
+      {!matchingCommandTyped && (
+        <CommandSuggestions
+          matchingCommands={commandsThatMatchPartialCommand}
+          command={command}
+          tryAgain={tryAgain}
+          setCommand={setCommand}
+          commandPromptRef={commandPromptRef}
+        />
+      )}
+
+      {matchingCommandTyped && (
+        <div>
+          <span>Press</span>{" "}
+          <button
+            onClick={() => runCommand(command)}
+            className="bg-[#282c34] border border-white text-white rounded-[5px] text-[18px] cursor-pointer hover:shadow-[0_0_0_2px_white]"
+          >
+            Enter
+          </button>{" "}
+          <span>or</span>{" "}
+          <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
+            Try again.
+          </a>
+        </div>
+      )}
     </div>
   );
 }
