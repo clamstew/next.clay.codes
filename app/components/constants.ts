@@ -1,5 +1,5 @@
 export const goSiteToCommands = {
-  x: "https://twitter.com/Clay_Stewart",
+  x: "https://x.com/Clay_Stewart",
   github: "https://github.com/clamstew",
   "hire me": "https://www.linkedin.com/in/claystewart/",
   // "box it up": "https://www.mybox.es",

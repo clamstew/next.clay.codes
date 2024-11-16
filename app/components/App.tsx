@@ -6,6 +6,43 @@ interface CommandHistoryItem {
   output: string;
 }
 
+const getMatchingCommands = (command: string, allCommands: string[]) => {
+  if (!command) return [];
+  const regex = new RegExp(
+    command
+      .toLowerCase()
+      .replaceAll("(", "")
+      .replaceAll(")", "")
+      .replaceAll("*", "")
+      .replaceAll("&", "")
+      .replaceAll("^", "")
+      .replaceAll("%", "")
+      .replaceAll("$", "")
+      .replaceAll("#", "")
+      .replaceAll("@", "")
+      .replaceAll("!", "")
+      .replaceAll("~", "")
+      .replaceAll("`", "")
+      .replaceAll("-", "")
+      .replaceAll("_", "")
+      .replaceAll("+", "")
+      .replaceAll("=", "")
+      .replaceAll("[", "")
+      .replaceAll("]", "")
+      .replaceAll("{", "")
+      .replaceAll("}", "")
+      .replaceAll("|", "")
+      .replaceAll("\\", "")
+      .replaceAll("/", "")
+      .replaceAll("?", "")
+      .replaceAll(">", "")
+      .replaceAll(".", "")
+      .replaceAll("<", "")
+      .replaceAll(",", "")
+  );
+  return allCommands.filter((cmd) => cmd.match(regex));
+};
+
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
@@ -99,41 +136,15 @@ function App() {
     };
   }, [command, commandHistory, runCommand]);
 
-  const commandsThatMatchPartialCommand = allCommands.filter((cmd) => {
-    const regex = new RegExp(
-      command
-        .toLowerCase()
-        .replaceAll("(", "")
-        .replaceAll(")", "")
-        .replaceAll("*", "")
-        .replaceAll("&", "")
-        .replaceAll("^", "")
-        .replaceAll("%", "")
-        .replaceAll("$", "")
-        .replaceAll("#", "")
-        .replaceAll("@", "")
-        .replaceAll("!", "")
-        .replaceAll("~", "")
-        .replaceAll("`", "")
-        .replaceAll("-", "")
-        .replaceAll("_", "")
-        .replaceAll("+", "")
-        .replaceAll("=", "")
-        .replaceAll("[", "")
-        .replaceAll("]", "")
-        .replaceAll("{", "")
-        .replaceAll("}", "")
-        .replaceAll("|", "")
-        .replaceAll("\\", "")
-        .replaceAll("/", "")
-        .replaceAll("?", "")
-        .replaceAll(">", "")
-        .replaceAll(".", "")
-        .replaceAll("<", "")
-        .replaceAll(",", "")
-    );
-    return cmd.match(regex);
-  });
+  const commandsThatMatchPartialCommand = getMatchingCommands(
+    command,
+    allCommands
+  );
+
+  console.warn(
+    "commandsThatMatchPartialCommand",
+    commandsThatMatchPartialCommand
+  );
 
   const tryAgain = () => {
     setCommand("");
@@ -218,7 +229,7 @@ function App() {
             {commandsThatMatchPartialCommand.length > 0 && (
               <div>Commands to try:</div>
             )}
-            {commandsThatMatchPartialCommand.length > 0 || (
+            {commandsThatMatchPartialCommand.length === 0 && (
               <div>
                 No matching commands.{" "}
                 <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
