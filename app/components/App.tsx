@@ -6,6 +6,7 @@ import { CommandSuggestions } from "../sections/Home/components/CommandSuggestio
 import { CommandOutput } from "../sections/Home/components/CommandOutput";
 import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommandOutput";
 import { Title } from "../sections/Home/components/Title";
+import { Frame } from "~/sections/Home/components/Frame";
 
 interface CommandHistoryItem {
   command: string;
@@ -121,40 +122,38 @@ function App() {
     commandsThatMatchPartialCommand[0] === command;
 
   return (
-    <div className="text-center">
-      <header className="bg-[#282c34] min-h-screen flex flex-col items-center justify-center text-[calc(10px+2vmin)] text-cyan-500">
-        <Title />
+    <Frame>
+      <Title />
 
-        <div
-          className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
-        >
-          <CommandInput
-            commandPromptRef={commandPromptRef}
-            setCommand={setCommand}
-          />
-        </div>
+      <div
+        className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
+      >
+        <CommandInput
+          commandPromptRef={commandPromptRef}
+          setCommand={setCommand}
+        />
+      </div>
 
-        <CommandOutput error={commandError} output={commandOutput} />
+      <CommandOutput error={commandError} output={commandOutput} />
 
-        {!matchingCommandTyped && (
-          <CommandSuggestions
-            matchingCommands={commandsThatMatchPartialCommand}
-            command={command}
-            tryAgain={tryAgain}
-            setCommand={setCommand}
-            commandPromptRef={commandPromptRef}
-          />
-        )}
+      {!matchingCommandTyped && (
+        <CommandSuggestions
+          matchingCommands={commandsThatMatchPartialCommand}
+          command={command}
+          tryAgain={tryAgain}
+          setCommand={setCommand}
+          commandPromptRef={commandPromptRef}
+        />
+      )}
 
-        {matchingCommandTyped && (
-          <MatchedCommandOutput
-            command={command}
-            runCommand={runCommand}
-            tryAgain={tryAgain}
-          />
-        )}
-      </header>
-    </div>
+      {matchingCommandTyped && (
+        <MatchedCommandOutput
+          command={command}
+          runCommand={runCommand}
+          tryAgain={tryAgain}
+        />
+      )}
+    </Frame>
   );
 }
 
