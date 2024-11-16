@@ -1,135 +1,13 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { goSiteToCommands, terminalCommands, allCommands } from "./constants";
 import { getMatchingCommands } from "../shared/utils/commands-utils";
-
+import { CommandInput } from "../sections/Home/components/CommandInput";
+import { CommandSuggestions } from "../sections/Home/components/CommandSuggestions";
+import { CommandOutput } from "../sections/Home/components/CommandOutput";
 interface CommandHistoryItem {
   command: string;
   output: string;
 }
-
-interface CommandExampleProps {
-  cmd: string;
-  setCommand: (cmd: string) => void;
-  commandPromptRef: React.RefObject<HTMLInputElement>;
-}
-
-const CommandExample = ({
-  cmd,
-  setCommand,
-  commandPromptRef,
-}: CommandExampleProps) => (
-  <li>
-    <button
-      style={{ cursor: "pointer" }}
-      onClick={() => {
-        setCommand(cmd);
-        if (commandPromptRef.current) {
-          commandPromptRef.current.value = cmd;
-        }
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          setCommand(cmd);
-          if (commandPromptRef.current) {
-            commandPromptRef.current.value = cmd;
-          }
-        }
-      }}
-    >
-      {cmd}
-    </button>
-  </li>
-);
-
-interface CommandInputProps {
-  commandPromptRef: React.RefObject<HTMLInputElement>;
-  setCommand: (value: string) => void;
-}
-
-const CommandInput = ({ commandPromptRef, setCommand }: CommandInputProps) => (
-  <div className="flex items-center">
-    <div className="inline-block text-white text-[40px]">$&gt;</div>
-    <input
-      ref={commandPromptRef}
-      spellCheck="false"
-      autoComplete="off"
-      autoCorrect="off"
-      autoCapitalize="off"
-      onChange={(e) => setCommand(e.target.value)}
-      placeholder="run a command ..."
-      className="inline-block bg-[#282c34] text-white border-none outline-none w-[500px] h-[46px] text-[30px] md:max-w-[94%]"
-    />
-  </div>
-);
-
-interface CommandOutputProps {
-  error: string;
-  output: string;
-}
-
-const CommandOutput = ({ error, output }: CommandOutputProps) => (
-  <>
-    {error && (
-      <div className="text-red-500 text-left w-[548px] mb-[30px]">{error}</div>
-    )}
-    {output && (
-      <div
-        className="text-green-500 text-left w-[548px] mb-[30px]"
-        dangerouslySetInnerHTML={{ __html: output }}
-      />
-    )}
-  </>
-);
-
-interface CommandSuggestionsProps {
-  matchingCommands: string[];
-  command: string;
-  tryAgain: () => void;
-  setCommand: (cmd: string) => void;
-  commandPromptRef: React.RefObject<HTMLInputElement>;
-}
-
-const CommandSuggestions = ({
-  matchingCommands,
-  command,
-  tryAgain,
-  setCommand,
-  commandPromptRef,
-}: CommandSuggestionsProps) => (
-  <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]">
-    {matchingCommands.length > 0 && <div>Commands to try:</div>}
-    {matchingCommands.length === 0 && (
-      <div>
-        No matching commands.{" "}
-        <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
-          Try again.
-        </a>
-      </div>
-    )}
-    <div className="columns-2 mt-[20px]">
-      <ul className="m-0">
-        {command === "" &&
-          allCommands.map((cmd) => (
-            <CommandExample
-              key={cmd}
-              cmd={cmd}
-              setCommand={setCommand}
-              commandPromptRef={commandPromptRef}
-            />
-          ))}
-        {command !== "" &&
-          matchingCommands.map((cmd) => (
-            <CommandExample
-              key={cmd}
-              cmd={cmd}
-              setCommand={setCommand}
-              commandPromptRef={commandPromptRef}
-            />
-          ))}
-      </ul>
-    </div>
-  </div>
-);
 
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
