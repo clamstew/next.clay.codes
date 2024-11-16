@@ -4,7 +4,7 @@ export const goSiteToCommands = {
   "hire me": "https://www.linkedin.com/in/claystewart/",
   // "box it up": "https://www.mybox.es",
   // asdf: "https://github.com/asdf-vm/asdf",
-  "site code": "https://github.com/clamstew/clay.codes",
+  "site code": "https://github.com/clamstew/next.clay.codes",
   notes: "https://notes.build",
 };
 
