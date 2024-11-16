@@ -13,6 +13,13 @@ interface CommandHistoryItem {
   output: string;
 }
 
+const detectMatchingCommandFound = (
+  matchingCommands: string[],
+  command: string
+): boolean => {
+  return matchingCommands.length === 1 && matchingCommands[0] === command;
+};
+
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
@@ -117,9 +124,10 @@ function App() {
     }
   };
 
-  const matchingCommandTyped =
-    commandsThatMatchPartialCommand.length === 1 &&
-    commandsThatMatchPartialCommand[0] === command;
+  const matchingCommandTyped = detectMatchingCommandFound(
+    commandsThatMatchPartialCommand,
+    command
+  );
 
   return (
     <Frame>
