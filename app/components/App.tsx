@@ -124,36 +124,36 @@ function App() {
         <code className="text-[40px] font-normal select-none text-[rgb(0, 255, 255)]">
           &lt;clay.codes /&gt;
         </code>
+
+        <div
+          className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
+        >
+          <CommandInput
+            commandPromptRef={commandPromptRef}
+            setCommand={setCommand}
+          />
+        </div>
+
+        <CommandOutput error={commandError} output={commandOutput} />
+
+        {!matchingCommandTyped && (
+          <CommandSuggestions
+            matchingCommands={commandsThatMatchPartialCommand}
+            command={command}
+            tryAgain={tryAgain}
+            setCommand={setCommand}
+            commandPromptRef={commandPromptRef}
+          />
+        )}
+
+        {matchingCommandTyped && (
+          <MatchedCommandOutput
+            command={command}
+            runCommand={runCommand}
+            tryAgain={tryAgain}
+          />
+        )}
       </header>
-
-      <div
-        className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
-      >
-        <CommandInput
-          commandPromptRef={commandPromptRef}
-          setCommand={setCommand}
-        />
-      </div>
-
-      <CommandOutput error={commandError} output={commandOutput} />
-
-      {!matchingCommandTyped && (
-        <CommandSuggestions
-          matchingCommands={commandsThatMatchPartialCommand}
-          command={command}
-          tryAgain={tryAgain}
-          setCommand={setCommand}
-          commandPromptRef={commandPromptRef}
-        />
-      )}
-
-      {matchingCommandTyped && (
-        <MatchedCommandOutput
-          command={command}
-          runCommand={runCommand}
-          tryAgain={tryAgain}
-        />
-      )}
     </div>
   );
 }
