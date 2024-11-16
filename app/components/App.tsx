@@ -5,6 +5,8 @@ import { CommandInput } from "../sections/Home/components/CommandInput";
 import { CommandSuggestions } from "../sections/Home/components/CommandSuggestions";
 import { CommandOutput } from "../sections/Home/components/CommandOutput";
 import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommandOutput";
+import { Title } from "../sections/Home/components/Title";
+
 interface CommandHistoryItem {
   command: string;
   output: string;
@@ -121,9 +123,7 @@ function App() {
   return (
     <div className="text-center">
       <header className="bg-[#282c34] min-h-screen flex flex-col items-center justify-center text-[calc(10px+2vmin)] text-cyan-500">
-        <code className="text-[40px] font-normal select-none text-[rgb(0, 255, 255)]">
-          &lt;clay.codes /&gt;
-        </code>
+        <Title />
 
         <div
           className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
