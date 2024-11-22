@@ -1,3 +1,4 @@
+import { signal } from "@preact/signals-react";
 import {
   Links,
   LiveReload,
@@ -7,12 +8,40 @@ import {
   ScrollRestoration,
   useRouteError,
 } from "@remix-run/react";
+import { StrictMode } from "react";
 import "~/styles/tailwind.css";
+const isHydratedSignal = signal(false);
+
+function checkHydration() {
+  if (typeof window !== "undefined") {
+    console.debug("[Hydration] Client-side hydration completed");
+    isHydratedSignal.value = true;
+  } else {
+    console.debug("[Hydration] Server-side render");
+  }
+  return isHydratedSignal.value;
+}
 
 export default function App() {
-  const error = useRouteError();
-  console.error(error);
-  ``;
+  const hydrated = checkHydration();
+  // s;
+
+  if (!hydrated) {
+    console.debug("[App] Waiting for hydration...");
+    return <div>Loading...</div>; // Or a proper loading state
+  }
+  // const error = useRouteError();
+  if (process.env.NODE_ENV === "development") {
+    const originalError = console.error;
+    console.error = (...args) => {
+      if (args[0]?.includes?.("Warning: Text content did not match")) {
+        console.warn("[Hydration] Mismatch detected:", args);
+      }
+      originalError.apply(console, args);
+    };
+  }
+  // console.error(error);
+  // ``;
   return (
     <html lang="en">
       <head>
@@ -49,3 +78,23 @@ export default function App() {
 // export function links() {
 //   return [{ rel: "stylesheet", href: "~/styles/tailwind.css" }];
 // }
+
+export function ErrorBoundary() {
+  const error = useRouteError();
+  console.error(error);
+  return (
+    <StrictMode>
+      <html lang="en">
+        <head>
+          <title>Oh no!</title>
+          <Meta />
+          <Links />
+        </head>
+        <body>
+          {/* add the UI you want your users to see */}
+          <Scripts />
+        </body>
+      </html>
+    </StrictMode>
+  );
+}

@@ -14,6 +14,25 @@ interface CommandHistoryItem {
   output: string;
 }
 
+const isHydratedSignal = signal(false);
+// Move hydration check to useState to avoid client/server mismatch
+function isHydrated() {
+  if (typeof window !== "undefined") {
+    isHydratedSignal.value = true;
+  }
+  return isHydratedSignal.value;
+}
+
+// function checkHydration() {
+//   if (typeof window !== "undefined") {
+//     console.debug("[Hydration] Client-side hydration completed");
+//     isHydratedSignal.value = true;
+//   } else {
+//     console.debug("[Hydration] Server-side render");
+//   }
+//   return isHydratedSignal.value;
+// }
+
 const detectMatchingCommandFound = (
   matchingCommands: string[],
   command: string
@@ -26,51 +45,51 @@ const commandErrorSignal = signal("");
 const commandOutputSignal = signal("");
 const commandHistorySignal = signal<CommandHistoryItem[]>([]);
 
+const runCommand = (command: string) => {
+  console.warn("running command", command);
+  let output = "";
+  if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
+    output = `Opening site: ${
+      goSiteToCommands[command as keyof typeof goSiteToCommands]
+    }`;
+    commandOutputSignal.value = output;
+    // delay for a hot second, so user can see the output
+    setTimeout(() => {
+      window.open(
+        goSiteToCommands[command as keyof typeof goSiteToCommands],
+        "_blank"
+      );
+    }, 600);
+  } else if (command === terminalCommands.history) {
+    // print history
+    const historyString = `${commandHistorySignal.value
+      .map((historyItem) => historyItem.command)
+      .join("<br />")}<br />${command}`;
+    commandOutputSignal.value = historyString;
+  } else {
+    output = `bash: command not found: ${command}`;
+    commandErrorSignal.value = output;
+  }
+
+  // add command to command history
+  commandHistorySignal.value = [
+    ...commandHistorySignal.value,
+    { command, output },
+  ];
+};
+
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
 
-  const runCommand = (command: string) => {
-    let output = "";
-    if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
-      output = `Opening site: ${
-        goSiteToCommands[command as keyof typeof goSiteToCommands]
-      }`;
-      // setCommandOutput(output);
-      commandOutputSignal.value = output;
-      // delay for a hot second, so user can see the output
-      setTimeout(() => {
-        window.open(
-          goSiteToCommands[command as keyof typeof goSiteToCommands],
-          "_blank"
-        );
-      }, 600);
-    } else if (command === terminalCommands.history) {
-      // print history
-      const historyString = `${commandHistorySignal.value
-        .map((historyItem) => historyItem.command)
-        .join("<br />")}<br />${command}`;
-      // setCommandOutput(historyString);
-      commandOutputSignal.value = historyString;
-    } else {
-      output = `bash: command not found: ${command}`;
-      // setCommandError(output);
-      commandErrorSignal.value = output;
-    }
-
-    // add command to command history
-    commandHistorySignal.value = [
-      ...commandHistorySignal.value,
-      { command, output },
-    ];
-  };
+  const hydrated = isHydrated();
 
   effect(() => {
+    if (!hydrated) return;
+
     const currentCommandPromptRef = commandPromptRef.current;
     if (!currentCommandPromptRef) return;
 
     currentCommandPromptRef.focus();
-
-    // const runCommandAlias = runCommand;
 
     const keyUpEventListener = (event: KeyboardEvent) => {
       if (process.env.NODE_ENV === "development") {
@@ -84,13 +103,14 @@ function App() {
 
     const keyDownEventListener = (event: KeyboardEvent) => {
       // https://stackoverflow.com/questions/47809282/submit-a-form-when-enter-is-pressed-in-a-textarea-in-react?rq=1
-      // console.warn("what keycode", event.which);
       if (event.which === 27 && event.shiftKey === false) {
         event.preventDefault();
         commandSignal.value = "";
         commandErrorSignal.value = "";
         commandOutputSignal.value = "";
-        // @FIXME - need to clear input value
+        if (commandPromptRef.current) {
+          commandPromptRef.current.value = "";
+        }
       } else if (event.which === 13 && event.shiftKey === false) {
         event.preventDefault();
         runCommand(commandSignal.value.toLowerCase());
@@ -131,6 +151,11 @@ function App() {
     commandsThatMatchPartialCommand,
     commandSignal.value
   );
+
+  if (!hydrated) {
+    console.debug("[App] Waiting for hydration...");
+    return <div>Loading...</div>; // Or a proper loading state
+  }
 
   return (
     <Frame>
