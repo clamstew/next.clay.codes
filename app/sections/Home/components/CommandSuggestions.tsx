@@ -17,8 +17,10 @@ export const CommandSuggestions = ({
   commandPromptRef,
 }: CommandSuggestionsProps) => (
   <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]">
-    {matchingCommands.length > 0 && <div>Commands to try:</div>}
-    {matchingCommands.length === 0 && (
+    {(matchingCommands.length > 0 || command === "") && (
+      <div>Commands to try:</div>
+    )}
+    {command !== "" && matchingCommands.length === 0 && (
       <div>
         No matching commands.{" "}
         <button onClick={tryAgain} className="text-[#61dafb]">
