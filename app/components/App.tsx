@@ -1,4 +1,4 @@
-import { useRef } from "react";
+import { useEffect, useRef, useState, useCallback } from "react";
 import { goSiteToCommands, terminalCommands, allCommands } from "./constants";
 import { getMatchingCommands } from "../shared/utils/commands-utils";
 import { CommandInput } from "../sections/Home/components/CommandInput";
@@ -7,7 +7,6 @@ import { CommandOutput } from "../sections/Home/components/CommandOutput";
 import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommandOutput";
 import { Title } from "../sections/Home/components/Title";
 import { Frame } from "~/sections/Home/components/Frame";
-import { signal, effect } from "@preact/signals-react";
 
 interface CommandHistoryItem {
   command: string;
@@ -21,56 +20,54 @@ const detectMatchingCommandFound = (
   return matchingCommands.length === 1 && matchingCommands[0] === command;
 };
 
-const commandSignal = signal("");
-const commandErrorSignal = signal("");
-const commandOutputSignal = signal("");
-const commandHistorySignal = signal<CommandHistoryItem[]>([]);
-
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
+  const [command, setCommand] = useState("");
+  const [commandError, setCommandError] = useState("");
+  const [commandOutput, setCommandOutput] = useState("");
+  const [commandHistory, setCommandHistory] = useState<CommandHistoryItem[]>(
+    []
+  );
 
-  const runCommand = (command: string) => {
-    let output = "";
-    if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
-      output = `Opening site: ${
-        goSiteToCommands[command as keyof typeof goSiteToCommands]
-      }`;
-      // setCommandOutput(output);
-      commandOutputSignal.value = output;
-      // delay for a hot second, so user can see the output
-      setTimeout(() => {
-        window.open(
-          goSiteToCommands[command as keyof typeof goSiteToCommands],
-          "_blank"
-        );
-      }, 600);
-    } else if (command === terminalCommands.history) {
-      // print history
-      const historyString = `${commandHistorySignal.value
-        .map((historyItem) => historyItem.command)
-        .join("<br />")}<br />${command}`;
-      // setCommandOutput(historyString);
-      commandOutputSignal.value = historyString;
-    } else {
-      output = `bash: command not found: ${command}`;
-      // setCommandError(output);
-      commandErrorSignal.value = output;
-    }
+  const runCommand = useCallback(
+    (command: string) => {
+      let output = "";
+      if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
+        output = `Opening site: ${
+          goSiteToCommands[command as keyof typeof goSiteToCommands]
+        }`;
+        setCommandOutput(output);
+        // delay for a hot second, so user can see the output
+        setTimeout(() => {
+          window.open(
+            goSiteToCommands[command as keyof typeof goSiteToCommands],
+            "_blank"
+          );
+        }, 600);
+      } else if (command === terminalCommands.history) {
+        // print history
+        const historyString = `${commandHistory
+          .map((historyItem) => historyItem.command)
+          .join("<br />")}<br />${command}`;
+        setCommandOutput(historyString);
+      } else {
+        output = `bash: command not found: ${command}`;
+        setCommandError(output);
+      }
 
-    // add command to command history
-    commandHistorySignal.value = [
-      ...commandHistorySignal.value,
-      { command, output },
-    ];
-  };
+      // add command to command history
+      setCommandHistory([...commandHistory, { command, output }]);
+    },
+    [commandHistory]
+  );
 
-  effect(() => {
+  useEffect(() => {
     const currentCommandPromptRef = commandPromptRef.current;
     if (!currentCommandPromptRef) return;
 
     currentCommandPromptRef.focus();
 
-    // const runCommandAlias = runCommand;
+    const runCommandAlias = runCommand;
 
     const keyUpEventListener = (event: KeyboardEvent) => {
       if (process.env.NODE_ENV === "development") {
@@ -87,16 +84,16 @@ function App() {
       // console.warn("what keycode", event.which);
       if (event.which === 27 && event.shiftKey === false) {
         event.preventDefault();
-        commandSignal.value = "";
-        commandErrorSignal.value = "";
-        commandOutputSignal.value = "";
+        setCommand("");
+        setCommandError("");
+        setCommandOutput("");
         // @FIXME - need to clear input value
       } else if (event.which === 13 && event.shiftKey === false) {
         event.preventDefault();
-        runCommand(commandSignal.value.toLowerCase());
+        runCommandAlias(command.toLowerCase());
       } else {
-        commandErrorSignal.value = "";
-        commandOutputSignal.value = "";
+        setCommandError("");
+        setCommandOutput("");
       }
     };
 
@@ -111,17 +108,17 @@ function App() {
         keyDownEventListener
       );
     };
-  });
+  }, [command, commandHistory, runCommand]);
 
   const commandsThatMatchPartialCommand = getMatchingCommands(
-    commandSignal.value,
+    command,
     allCommands
   );
 
   const tryAgain = () => {
-    commandSignal.value = "";
-    commandErrorSignal.value = "";
-    commandOutputSignal.value = "";
+    setCommand("");
+    setCommandError("");
+    setCommandOutput("");
     if (commandPromptRef.current) {
       commandPromptRef.current.value = "";
     }
@@ -129,7 +126,7 @@ function App() {
 
   const matchingCommandTyped = detectMatchingCommandFound(
     commandsThatMatchPartialCommand,
-    commandSignal.value
+    command
   );
 
   return (
@@ -137,36 +134,29 @@ function App() {
       <Title />
 
       <div
-        className={
-          commandOutputSignal.value || commandErrorSignal.value
-            ? "mt-[50px]"
-            : "my-[50px]"
-        }
+        className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
       >
         <CommandInput
           commandPromptRef={commandPromptRef}
-          setCommand={(value) => (commandSignal.value = value)}
+          setCommand={setCommand}
         />
       </div>
 
-      <CommandOutput
-        error={commandErrorSignal.value}
-        output={commandOutputSignal.value}
-      />
+      <CommandOutput error={commandError} output={commandOutput} />
 
       {!matchingCommandTyped && (
         <CommandSuggestions
           matchingCommands={commandsThatMatchPartialCommand}
-          command={commandSignal.value}
-          setCommand={(value) => (commandSignal.value = value)}
+          command={command}
           tryAgain={tryAgain}
+          setCommand={setCommand}
           commandPromptRef={commandPromptRef}
         />
       )}
 
       {matchingCommandTyped && (
         <MatchedCommandOutput
-          command={commandSignal.value}
+          command={command}
           runCommand={runCommand}
           tryAgain={tryAgain}
         />
