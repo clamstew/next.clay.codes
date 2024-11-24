@@ -1,18 +1,18 @@
 import {
   Links,
-  LiveReload,
+  // LiveReload,
   Meta,
   Outlet,
   Scripts,
   ScrollRestoration,
-  useRouteError,
+  // useRouteError,
 } from "@remix-run/react";
 import "~/styles/tailwind.css";
 
 export default function App() {
-  const error = useRouteError();
-  console.error(error);
-  ``;
+  // const error = useRouteError();
+  // console.error(error);
+  // ``;
   return (
     <html lang="en">
       <head>
@@ -20,7 +20,7 @@ export default function App() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <Meta />
         <Links />
-        <style>{`
+        {/* <style>{`
           body {
             margin: 0;
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -34,12 +34,12 @@ export default function App() {
             font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
               monospace;
           }
-        `}</style>
+        `}</style> */}
       </head>
       <body>
         <Outlet />
         <ScrollRestoration />
-        <LiveReload />
+        {/* <LiveReload /> */}
         <Scripts />
       </body>
     </html>

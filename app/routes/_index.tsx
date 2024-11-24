@@ -1,5 +1,5 @@
 import type { MetaFunction } from "@netlify/remix-runtime";
-import App from "../components/App";
+import App, { AppProvider } from "../components/App";
 export const meta: MetaFunction = () => {
   return [
     { title: "clay.codes" },
@@ -12,5 +12,9 @@ export const meta: MetaFunction = () => {
 };
 
 export default function Index() {
-  return <App />;
+  return (
+    <AppProvider>
+      <App />
+    </AppProvider>
+  );
 }
