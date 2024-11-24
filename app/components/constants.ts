@@ -12,6 +12,8 @@ export const goSiteToCommands = {
 
 export const terminalCommands = {
   history: "history",
+  fullscreen: "fullscreen",
+  minimize: "minimize",
 };
 
 export const allCommands = [

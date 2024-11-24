@@ -50,6 +50,12 @@ function App() {
           .map((historyItem) => historyItem.command)
           .join("<br />")}<br />${command}`;
         setCommandOutput(historyString);
+      } else if (command === terminalCommands.fullscreen) {
+        document.documentElement.requestFullscreen();
+        setCommandOutput("Fullscreen mode activated.");
+      } else if (command === terminalCommands.minimize) {
+        document.exitFullscreen();
+        setCommandOutput("Minimized mode activated.");
       } else {
         output = `bash: command not found: ${command}`;
         setCommandError(output);
