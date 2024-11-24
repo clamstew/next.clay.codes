@@ -80,8 +80,6 @@ function App() {
     };
 
     const keyDownEventListener = (event: KeyboardEvent) => {
-      // https://stackoverflow.com/questions/47809282/submit-a-form-when-enter-is-pressed-in-a-textarea-in-react?rq=1
-      // console.warn("what keycode", event.which);
       if (event.which === 27 && event.shiftKey === false) {
         event.preventDefault();
         setCommand("");
@@ -133,14 +131,10 @@ function App() {
     <Frame>
       <Title />
 
-      <div
-        className={commandOutput || commandError ? "mt-[50px]" : "my-[50px]"}
-      >
-        <CommandInput
-          commandPromptRef={commandPromptRef}
-          setCommand={setCommand}
-        />
-      </div>
+      <CommandInput
+        commandPromptRef={commandPromptRef}
+        setCommand={setCommand}
+      />
 
       <CommandOutput error={commandError} output={commandOutput} />
 

@@ -21,9 +21,9 @@ export const CommandSuggestions = ({
     {matchingCommands.length === 0 && (
       <div>
         No matching commands.{" "}
-        <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
+        <button onClick={tryAgain} className="text-[#61dafb]">
           Try again.
-        </a>
+        </button>
       </div>
     )}
     <div className="columns-2 mt-[20px]">

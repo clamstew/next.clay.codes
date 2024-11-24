@@ -18,8 +18,8 @@ export const MatchedCommandOutput = ({
       Enter
     </button>{" "}
     <span>or</span>{" "}
-    <a href="#/" onClick={tryAgain} className="text-[#61dafb]">
+    <button onClick={tryAgain} className="text-[#61dafb]">
       Try again.
-    </a>
+    </button>
   </div>
 );
