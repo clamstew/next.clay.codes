@@ -69,6 +69,7 @@ function App() {
         }
       } else if (command === terminalCommands.terminal) {
         setCommandOutput("Terminal mode activated.");
+        document.documentElement.requestFullscreen();
         setIsFullscreenTerminal(true);
       } else if (command === terminalCommands.exit) {
         setIsFullscreenTerminal(false);
