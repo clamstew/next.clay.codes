@@ -14,6 +14,9 @@ export const terminalCommands = {
   history: "history",
   fullscreen: "fullscreen",
   minimize: "minimize",
+  terminal: "terminal",
+  clear: "clear",
+  exit: "exit",
 };
 
 export const allCommands = [

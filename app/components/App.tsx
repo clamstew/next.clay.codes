@@ -28,6 +28,7 @@ function App() {
   const [commandHistory, setCommandHistory] = useState<CommandHistoryItem[]>(
     []
   );
+  const [isFullscreenTerminal, setIsFullscreenTerminal] = useState(false);
 
   const runCommand = useCallback(
     (command: string) => {
@@ -56,6 +57,19 @@ function App() {
       } else if (command === terminalCommands.minimize) {
         document.exitFullscreen();
         setCommandOutput("Minimized mode activated.");
+      } else if (command === terminalCommands.clear) {
+        setCommandOutput("");
+        setCommand("");
+        setIsFullscreenTerminal(false);
+        if (commandPromptRef.current) {
+          commandPromptRef.current.value = "";
+        }
+        document.exitFullscreen();
+      } else if (command === terminalCommands.terminal) {
+        setCommandOutput("Terminal mode activated.");
+        setIsFullscreenTerminal(true);
+      } else if (command === terminalCommands.exit) {
+        setIsFullscreenTerminal(false);
       } else {
         output = `bash: command not found: ${command}`;
         setCommandError(output);
@@ -133,8 +147,28 @@ function App() {
     command
   );
 
+  if (isFullscreenTerminal) {
+    return (
+      <div className="h-screen w-screen bg-[#282c34] text-white">
+        <div>Fullscreen mode activated.</div>
+
+        <input
+          ref={commandPromptRef}
+          spellCheck="false"
+          onChange={(e) => setCommand(e.target.value)}
+          placeholder="run a command ..."
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          className="bg-[#282c34] text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]"
+        />
+      </div>
+    );
+  }
+
   return (
     <Frame>
+      {isFullscreenTerminal && <div>Fullscreen mode activated.</div>}
       <Title />
 
       <CommandInput
