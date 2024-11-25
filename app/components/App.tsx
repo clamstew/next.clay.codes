@@ -152,18 +152,21 @@ function App() {
   if (isFullscreenTerminal) {
     return (
       <div className="h-screen w-screen bg-[#282c34] text-white">
-        <div>Fullscreen mode activated.</div>
+        {/* <div>Fullscreen mode activated.</div> */}
 
-        <input
-          ref={commandPromptRef}
-          spellCheck="false"
-          onChange={(e) => setCommand(e.target.value)}
-          placeholder="run a command ..."
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          className="bg-[#282c34] text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]"
-        />
+        <div className="flex items-center">
+          <div className="inline-block text-white text-[40px]">$&gt;</div>
+          <input
+            ref={commandPromptRef}
+            spellCheck="false"
+            onChange={(e) => setCommand(e.target.value)}
+            placeholder="run a command ..."
+            autoComplete="off"
+            autoCorrect="off"
+            autoCapitalize="off"
+            className="inline-block bg-[#282c34] text-white border-none outline-none w-[500px] h-[46px] text-[30px] md:max-w-[94%]"
+          />
+        </div>
 
         <CommandOutput error={commandError} output={commandOutput} />
       </div>
