@@ -11,6 +11,7 @@ import { Frame } from "~/sections/Home/components/Frame";
 interface CommandHistoryItem {
   command: string;
   output: string;
+  error: string;
 }
 
 const detectMatchingCommandFound = (
@@ -79,9 +80,12 @@ function App() {
       }
 
       // add command to command history
-      setCommandHistory([...commandHistory, { command, output }]);
+      setCommandHistory([
+        ...commandHistory,
+        { command, output, error: commandError },
+      ]);
     },
-    [commandHistory]
+    [commandHistory, commandError]
   );
 
   useEffect(() => {
@@ -154,6 +158,27 @@ function App() {
     return (
       <div className="h-screen w-screen bg-[#282c34] text-white">
         {/* <div>Fullscreen mode activated.</div> */}
+
+        {commandHistory.map((historyItem, index) => (
+          <div key={index} className="mb-4">
+            <div className="flex items-center">
+              <div className="inline-block text-white text-[40px]">$&gt;</div>
+              <div className="inline-block text-white text-[30px]">
+                {historyItem.command}
+              </div>
+            </div>
+            {historyItem.output && (
+              <div className="text-white text-[16px] ml-12">
+                {historyItem.output}
+              </div>
+            )}
+            {historyItem.error && (
+              <div className="text-red-500 text-[16px] ml-12">
+                {historyItem.error}
+              </div>
+            )}
+          </div>
+        ))}
 
         <div className="flex items-center">
           <div className="inline-block text-white text-[40px]">$&gt;</div>
