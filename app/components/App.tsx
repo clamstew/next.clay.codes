@@ -162,6 +162,8 @@ function App() {
           autoCapitalize="off"
           className="bg-[#282c34] text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]"
         />
+
+        <CommandOutput error={commandError} output={commandOutput} />
       </div>
     );
   }
