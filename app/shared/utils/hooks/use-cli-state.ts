@@ -25,6 +25,32 @@ const getNextHistoryIndex = (
     : historyIndex;
 };
 
+const devOutput = (
+  event: KeyboardEvent,
+  commandHistory: CommandHistoryItem[]
+) => {
+  if (process.env.NODE_ENV === "development") {
+    console.warn("what am i typing:", (event.target as HTMLInputElement).value);
+
+    // log command history for debugging
+    console.groupCollapsed("command history");
+    console.table(commandHistory);
+    console.groupEnd();
+  }
+};
+
+const scrollToCommandPrompt = (
+  commandPromptRef: React.RefObject<HTMLInputElement>,
+  delay?: number,
+  behavior?: ScrollOptions["behavior"]
+) => {
+  setTimeout(() => {
+    commandPromptRef.current?.scrollIntoView({
+      behavior: behavior || "smooth",
+    });
+  }, delay || 100);
+};
+
 function useCliState() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
@@ -123,9 +149,7 @@ function useCliState() {
       // reset history index (arrow up/down)
       setHistoryIndex(-1);
       updateCommandPromptValue(commandPromptRef, "");
-      setTimeout(() => {
-        commandPromptRef.current?.scrollIntoView({ behavior: "smooth" });
-      }, 100);
+      scrollToCommandPrompt(commandPromptRef);
     },
     [commandHistory, commandError]
   );
@@ -139,12 +163,7 @@ function useCliState() {
     const runCommandAlias = runCommand;
 
     const keyUpEventListener = (event: KeyboardEvent) => {
-      if (process.env.NODE_ENV === "development") {
-        console.warn(
-          "what am i typing:",
-          (event.target as HTMLInputElement).value
-        );
-      }
+      devOutput(event, commandHistory);
       // TODO: will run command highlighting here
     };
 
