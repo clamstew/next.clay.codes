@@ -97,6 +97,7 @@ function App() {
 
       // clear prompt line
       setCommand("");
+      // reset history index (arrow up/down)
       setHistoryIndex(-1);
       if (commandPromptRef.current) {
         commandPromptRef.current.value = "";
