@@ -28,7 +28,7 @@ export const CommandSuggestions = ({
         </button>
       </div>
     )}
-    <div className="columns-1 [@media(min-width:400px)]:columns-2 mt-[10px]">
+    <div className="columns-1 [@media(min-width:400px)]:columns-2 mt-[10px] hidden [@media(min-width:60px)]:block">
       <ul className="m-0">
         {command === "" &&
           allCommands.map((cmd) => (
@@ -49,6 +49,9 @@ export const CommandSuggestions = ({
             />
           ))}
       </ul>
+    </div>
+    <div className="block [@media(min-width:60px)]:hidden text-center text-2xl">
+      😖
     </div>
   </div>
 );
