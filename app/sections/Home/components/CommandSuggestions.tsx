@@ -1,6 +1,5 @@
 import { CommandExample } from "./CommandExample";
 import { allCommands } from "../../../components/constants";
-import { Command } from "~/types";
 
 interface CommandSuggestionsProps {
   matchingCommands: string[];
@@ -44,7 +43,7 @@ export const CommandSuggestions = ({
           matchingCommands.map((cmd) => (
             <CommandExample
               key={cmd}
-              cmd={allCommands[cmd as keyof typeof allCommands] as Command}
+              cmd={allCommands.find((c) => c.command === cmd)!}
               setCommand={setCommand}
               commandPromptRef={commandPromptRef}
             />

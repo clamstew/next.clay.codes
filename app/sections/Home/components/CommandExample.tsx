@@ -11,8 +11,7 @@ export const CommandExample = ({
   setCommand,
   commandPromptRef,
 }: CommandExampleProps) => {
-  const { emoji } = cmd;
-  const prefix = emoji ? `${emoji} ` : "▻ ";
+  const prefix = cmd?.emoji ? `${cmd.emoji} ` : "▻ ";
   return (
     <li>
       <button
