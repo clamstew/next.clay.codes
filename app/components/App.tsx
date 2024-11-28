@@ -7,6 +7,7 @@ import { CommandOutput } from "../sections/Home/components/CommandOutput";
 import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommandOutput";
 import { Title } from "../sections/Home/components/Title";
 import { Frame } from "~/sections/Home/components/Frame";
+import { FullscreenTerminal } from "./FullscreenTerminal";
 
 interface CommandHistoryItem {
   command: string;
@@ -156,46 +157,13 @@ function App() {
 
   if (isFullscreenTerminal) {
     return (
-      <div className="h-screen w-screen bg-[#282c34] text-white">
-        {/* <div>Fullscreen mode activated.</div> */}
-
-        {commandHistory.map((historyItem, index) => (
-          <div key={index} className="mb-4">
-            <div className="flex items-center">
-              <div className="inline-block text-white text-[40px]">$&gt;</div>
-              <div className="inline-block text-white text-[30px]">
-                {historyItem.command}
-              </div>
-            </div>
-            {historyItem.output && (
-              <div className="text-white text-[16px] ml-12">
-                {historyItem.output}
-              </div>
-            )}
-            {historyItem.error && (
-              <div className="text-red-500 text-[16px] ml-12">
-                {historyItem.error}
-              </div>
-            )}
-          </div>
-        ))}
-
-        <div className="flex items-center">
-          <div className="inline-block text-white text-[40px]">$&gt;</div>
-          <input
-            ref={commandPromptRef}
-            spellCheck="false"
-            onChange={(e) => setCommand(e.target.value)}
-            placeholder="run a command ..."
-            autoComplete="off"
-            autoCorrect="off"
-            autoCapitalize="off"
-            className="inline-block bg-[#282c34] text-white border-none outline-none w-[500px] h-[46px] text-[30px] md:max-w-[94%]"
-          />
-        </div>
-
-        <CommandOutput error={commandError} output={commandOutput} />
-      </div>
+      <FullscreenTerminal
+        commandHistory={commandHistory}
+        commandPromptRef={commandPromptRef}
+        setCommand={setCommand}
+        commandError={commandError}
+        commandOutput={commandOutput}
+      />
     );
   }
 
