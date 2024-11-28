@@ -4,6 +4,7 @@ import { CommandOutput } from "../../Home/components/CommandOutput";
 import { allCommands } from "~/components/constants";
 import { CommandList } from "./CommandList";
 import { HelpList } from "./HelpList";
+import type { Command } from "~/types";
 
 interface CommandHistoryItem {
   command: string;
@@ -11,13 +12,19 @@ interface CommandHistoryItem {
   error: string;
 }
 
+// interface Command {
+//   command: string;
+//   output: string;
+//   error: string;
+// }
+
 interface FullscreenTerminalProps {
   commandHistory: CommandHistoryItem[];
   commandPromptRef: RefObject<HTMLInputElement>;
   setCommand: (command: string) => void;
   commandError: string;
   commandOutput: string;
-  terminalCommands: Record<string, string>;
+  terminalCommands: Record<string, Command>;
 }
 
 export function FullscreenTerminal({
@@ -54,7 +61,7 @@ export function FullscreenTerminal({
       {/* Current Command Output */}
       {commandOutput === "::show-command-list::" ? (
         <CommandList
-          commands={allCommands}
+          commands={[...Object.values(allCommands)]}
           onCommandClick={handleCommandClick}
         />
       ) : commandOutput === "::show-help-list::" ? (

@@ -8,7 +8,7 @@ import type { CommandHistoryItem } from "~/types";
 import { EventKeyName, SpecialCommandOutputTokens } from "~/types";
 import { updateCommandPromptValue } from "~/components/App";
 import { getMatchingCommands } from "../commands-utils";
-
+import { delayOpenSite, safeExitFullscreen } from "../browser";
 const detectMatchingCommandFound = (
   matchingCommands: string[],
   command: string
@@ -48,15 +48,12 @@ function useCliState() {
             goSiteToCommands[command as keyof typeof goSiteToCommands];
           output = `Opening site: ${site}`;
           setCommandOutput(output);
-          // timeout to allow command output to show
-          setTimeout(() => {
-            window.open(site, "_blank");
-          }, 600);
+          delayOpenSite(site);
           break;
         }
 
         // Terminal commands
-        case tc.history: {
+        case tc.history.command: {
           const historyString = `${commandHistory
             .map((historyItem) => `* ${historyItem.command}`)
             .join("<br />")}<br />* ${command}`;
@@ -64,30 +61,28 @@ function useCliState() {
           break;
         }
 
-        case tc.fullscreen: {
+        case tc.fullscreen.command: {
           document.documentElement.requestFullscreen();
           setCommandOutput("Fullscreen mode activated.");
           break;
         }
 
-        case tc.minimize: {
-          document.exitFullscreen();
+        case tc.minimize.command: {
+          safeExitFullscreen();
           setCommandOutput("Minimized mode activated.");
           break;
         }
 
-        case tc.clear: {
+        case tc.clear.command: {
           setCommandOutput("");
           setCommand("");
           setIsFullscreenTerminal(false);
           updateCommandPromptValue(commandPromptRef, "");
-          if (document.fullscreenElement) {
-            document.exitFullscreen();
-          }
+          safeExitFullscreen();
           break;
         }
 
-        case tc.terminal: {
+        case tc.terminal.command: {
           setCommandOutput(
             "Terminal mode activated. Press ESC to exit full screen. <br /><br />Type 'exit' to exit terminal mode, but stay fullscreen. <br /><br />'clear' is a nice abort command."
           );
@@ -96,17 +91,17 @@ function useCliState() {
           break;
         }
 
-        case tc.exit: {
+        case tc.exit.command: {
           setIsFullscreenTerminal(false);
           break;
         }
 
-        case tc.compgen: {
+        case tc.compgen.command: {
           setCommandOutput(SpecialCommandOutputTokens.ShowCommandList);
           break;
         }
 
-        case tc.help: {
+        case tc.help.command: {
           setCommandOutput(SpecialCommandOutputTokens.ShowHelpList);
           break;
         }
@@ -192,9 +187,7 @@ function useCliState() {
             setCommandError("");
             setCommandOutput("");
             setIsFullscreenTerminal(false);
-            if (document.fullscreenElement) {
-              document.exitFullscreen();
-            }
+            safeExitFullscreen();
             updateCommandPromptValue(commandPromptRef, "");
           }
           break;
@@ -212,8 +205,8 @@ function useCliState() {
           if (commandsThatMatchPartialCommand.length === 1) {
             event.preventDefault();
             const matchedCommand = commandsThatMatchPartialCommand[0];
-            setCommand(matchedCommand);
-            updateCommandPromptValue(commandPromptRef, matchedCommand);
+            setCommand(matchedCommand.command);
+            updateCommandPromptValue(commandPromptRef, matchedCommand.command);
           }
           break;
         }
@@ -240,7 +233,7 @@ function useCliState() {
   }, [command, commandHistory, historyIndex, runCommand]);
 
   const commandsThatMatchPartialCommand = getMatchingCommands(
-    command,
+    command, // Pass command wrapped in object to match Command type
     allCommands
   );
 
@@ -252,7 +245,7 @@ function useCliState() {
   };
 
   const matchingCommandTyped = detectMatchingCommandFound(
-    commandsThatMatchPartialCommand,
+    commandsThatMatchPartialCommand.map((cmd) => cmd.command),
     command
   );
 

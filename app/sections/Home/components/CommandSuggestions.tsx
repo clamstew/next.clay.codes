@@ -33,8 +33,8 @@ export const CommandSuggestions = ({
         {command === "" &&
           allCommands.map((cmd) => (
             <CommandExample
-              key={cmd}
-              cmd={cmd}
+              key={cmd.command}
+              cmd={cmd.command}
               setCommand={setCommand}
               commandPromptRef={commandPromptRef}
             />

@@ -4,6 +4,22 @@ export interface CommandHistoryItem {
   error: string;
 }
 
+export interface Command {
+  command: string;
+  title: string;
+  description: string;
+  url?: string;
+  subCommands?: SubCommand[];
+  output?: string;
+  error?: string;
+}
+
+interface SubCommand {
+  command: string;
+  title: string;
+  description: string;
+}
+
 export enum EventKeyName {
   ArrowUp = "ArrowUp",
   ArrowDown = "ArrowDown",

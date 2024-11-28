@@ -95,7 +95,9 @@ function App() {
 
       {!matchingCommandTyped && !hideCommandSuggestions && (
         <CommandSuggestions
-          matchingCommands={commandsThatMatchPartialCommand}
+          matchingCommands={commandsThatMatchPartialCommand.map(
+            (cmd) => cmd.command
+          )}
           command={command}
           tryAgain={tryAgain}
           setCommand={setCommand}
