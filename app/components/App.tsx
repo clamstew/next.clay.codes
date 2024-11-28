@@ -28,6 +28,14 @@ const getNextHistoryIndex = (
     : historyIndex;
 };
 
+enum EventKeyName {
+  ArrowUp = "ArrowUp",
+  ArrowDown = "ArrowDown",
+  Escape = "Escape",
+  Enter = "Enter",
+  Tab = "Tab",
+}
+
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
@@ -42,7 +50,7 @@ function App() {
   const runCommand = useCallback(
     (command: string) => {
       let output = "";
-      const tc = terminalCommands;
+      const tc = terminalCommands; // for readability in the switch
 
       switch (command) {
         // Handle open site commands
@@ -161,8 +169,8 @@ function App() {
     };
 
     const keyDownEventListener = (event: KeyboardEvent) => {
-      switch (event.key) {
-        case "ArrowUp": {
+      switch (event.key as EventKeyName) {
+        case EventKeyName.ArrowUp: {
           event.preventDefault();
           if (commandHistory.length > 0) {
             const newIndex = getNextHistoryIndex(historyIndex, commandHistory);
@@ -178,7 +186,7 @@ function App() {
           break;
         }
 
-        case "ArrowDown": {
+        case EventKeyName.ArrowDown: {
           event.preventDefault();
           if (historyIndex > -1) {
             const newIndex = historyIndex - 1;
@@ -196,7 +204,7 @@ function App() {
           break;
         }
 
-        case "Escape": {
+        case EventKeyName.Escape: {
           if (!event.shiftKey) {
             event.preventDefault();
             setCommand("");
@@ -213,7 +221,7 @@ function App() {
           break;
         }
 
-        case "Enter": {
+        case EventKeyName.Enter: {
           if (!event.shiftKey) {
             event.preventDefault();
             runCommandAlias(command.toLowerCase());
@@ -221,7 +229,7 @@ function App() {
           break;
         }
 
-        case "Tab": {
+        case EventKeyName.Tab: {
           if (commandsThatMatchPartialCommand.length === 1) {
             event.preventDefault();
             const matchedCommand = commandsThatMatchPartialCommand[0];
