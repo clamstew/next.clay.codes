@@ -11,6 +11,7 @@ import { FullscreenTerminal } from "../sections/Terminal/components/FullscreenTe
 import { CommandList } from "../sections/Terminal/components/CommandList";
 import { HelpList } from "../sections/Terminal/components/HelpList";
 import type { CommandHistoryItem } from "../types";
+import { EventKeyName } from "../types";
 
 const detectMatchingCommandFound = (
   matchingCommands: string[],
@@ -28,13 +29,14 @@ const getNextHistoryIndex = (
     : historyIndex;
 };
 
-enum EventKeyName {
-  ArrowUp = "ArrowUp",
-  ArrowDown = "ArrowDown",
-  Escape = "Escape",
-  Enter = "Enter",
-  Tab = "Tab",
-}
+const updateCommandPromptValue = (
+  commandPromptRef: React.RefObject<HTMLInputElement>,
+  value: string
+) => {
+  if (commandPromptRef.current) {
+    commandPromptRef.current.value = value;
+  }
+};
 
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
@@ -91,9 +93,7 @@ function App() {
           setCommandOutput("");
           setCommand("");
           setIsFullscreenTerminal(false);
-          if (commandPromptRef.current) {
-            commandPromptRef.current.value = "";
-          }
+          updateCommandPromptValue(commandPromptRef, "");
           if (document.fullscreenElement) {
             document.exitFullscreen();
           }
@@ -140,9 +140,7 @@ function App() {
       setCommand("");
       // reset history index (arrow up/down)
       setHistoryIndex(-1);
-      if (commandPromptRef.current) {
-        commandPromptRef.current.value = "";
-      }
+      updateCommandPromptValue(commandPromptRef, "");
       setTimeout(() => {
         commandPromptRef.current?.scrollIntoView({ behavior: "smooth" });
       }, 100);
@@ -179,9 +177,7 @@ function App() {
               commandHistory[commandHistory.length - 1 - newIndex]?.command ||
               "";
             setCommand(historicCommand);
-            if (commandPromptRef.current) {
-              commandPromptRef.current.value = historicCommand;
-            }
+            updateCommandPromptValue(commandPromptRef, historicCommand);
           }
           break;
         }
@@ -197,9 +193,7 @@ function App() {
                 : commandHistory[commandHistory.length - 1 - newIndex]
                     ?.command || "";
             setCommand(historicCommand);
-            if (commandPromptRef.current) {
-              commandPromptRef.current.value = historicCommand;
-            }
+            updateCommandPromptValue(commandPromptRef, historicCommand);
           }
           break;
         }
@@ -214,9 +208,7 @@ function App() {
             if (document.fullscreenElement) {
               document.exitFullscreen();
             }
-            if (commandPromptRef.current) {
-              commandPromptRef.current.value = "";
-            }
+            updateCommandPromptValue(commandPromptRef, "");
           }
           break;
         }
@@ -234,9 +226,7 @@ function App() {
             event.preventDefault();
             const matchedCommand = commandsThatMatchPartialCommand[0];
             setCommand(matchedCommand);
-            if (commandPromptRef.current) {
-              commandPromptRef.current.value = matchedCommand;
-            }
+            updateCommandPromptValue(commandPromptRef, matchedCommand);
           }
           break;
         }
@@ -271,9 +261,7 @@ function App() {
     setCommand("");
     setCommandError("");
     setCommandOutput("");
-    if (commandPromptRef.current) {
-      commandPromptRef.current.value = "";
-    }
+    updateCommandPromptValue(commandPromptRef, "");
   };
 
   const matchingCommandTyped = detectMatchingCommandFound(
@@ -283,7 +271,7 @@ function App() {
 
   const handleCommandClick = useCallback((cmd: string) => {
     if (commandPromptRef.current) {
-      commandPromptRef.current.value = cmd;
+      updateCommandPromptValue(commandPromptRef, cmd);
       setCommand(cmd);
       commandPromptRef.current.focus();
     }
