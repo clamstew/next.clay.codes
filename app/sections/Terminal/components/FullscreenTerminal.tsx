@@ -3,6 +3,7 @@ import { CommandInput } from "../../Home/components/CommandInput";
 import { CommandOutput } from "../../Home/components/CommandOutput";
 import { allCommands } from "~/components/constants";
 import { CommandList } from "./CommandList";
+import { HelpList } from "./HelpList";
 
 interface CommandHistoryItem {
   command: string;
@@ -16,6 +17,7 @@ interface FullscreenTerminalProps {
   setCommand: (command: string) => void;
   commandError: string;
   commandOutput: string;
+  terminalCommands: Record<string, string>;
 }
 
 export function FullscreenTerminal({
@@ -24,6 +26,7 @@ export function FullscreenTerminal({
   setCommand,
   commandError,
   commandOutput,
+  terminalCommands,
 }: FullscreenTerminalProps) {
   const handleCommandClick = (command: string) => {
     setCommand(command);
@@ -52,6 +55,11 @@ export function FullscreenTerminal({
       {commandOutput === "::show-command-list::" ? (
         <CommandList
           commands={allCommands}
+          onCommandClick={handleCommandClick}
+        />
+      ) : commandOutput === "::show-help-list::" ? (
+        <HelpList
+          commands={terminalCommands}
           onCommandClick={handleCommandClick}
         />
       ) : (

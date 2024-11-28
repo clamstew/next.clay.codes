@@ -158,13 +158,19 @@ function App() {
             commandPromptRef.current.value = historicCommand;
           }
         }
-      } else if (event.which === 27 && event.shiftKey === false) {
+      } else if (event.key === "Escape" && !event.shiftKey) {
         event.preventDefault();
         setCommand("");
         setCommandError("");
         setCommandOutput("");
-        // @FIXME - need to clear input value
-      } else if (event.which === 13 && event.shiftKey === false) {
+        setIsFullscreenTerminal(false);
+        if (document.fullscreenElement) {
+          document.exitFullscreen();
+        }
+        if (commandPromptRef.current) {
+          commandPromptRef.current.value = "";
+        }
+      } else if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         runCommandAlias(command.toLowerCase());
       } else {
@@ -227,6 +233,7 @@ function App() {
         setCommand={setCommand}
         commandError={commandError}
         commandOutput={commandOutput}
+        terminalCommands={terminalCommands}
       />
     );
   }
