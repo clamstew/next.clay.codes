@@ -17,6 +17,7 @@ export type Command = {
   output?: string;
   error?: string;
   emoji?: string;
+  tags?: string[];
 };
 
 interface SubCommand {

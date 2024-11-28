@@ -1,5 +1,6 @@
 import { CommandExample } from "./CommandExample";
 import { allCommands } from "../../../components/constants";
+import { Command } from "~/types";
 
 interface CommandSuggestionsProps {
   matchingCommands: string[];
@@ -34,7 +35,7 @@ export const CommandSuggestions = ({
           allCommands.map((cmd) => (
             <CommandExample
               key={cmd.command}
-              cmd={cmd.command}
+              cmd={cmd}
               setCommand={setCommand}
               commandPromptRef={commandPromptRef}
             />
@@ -43,7 +44,7 @@ export const CommandSuggestions = ({
           matchingCommands.map((cmd) => (
             <CommandExample
               key={cmd}
-              cmd={cmd}
+              cmd={allCommands[cmd as keyof typeof allCommands] as Command}
               setCommand={setCommand}
               commandPromptRef={commandPromptRef}
             />

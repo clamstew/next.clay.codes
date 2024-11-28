@@ -1,5 +1,7 @@
+import type { Command } from "~/types";
+
 interface CommandExampleProps {
-  cmd: string;
+  cmd: Command;
   setCommand: (cmd: string) => void;
   commandPromptRef: React.RefObject<HTMLInputElement>;
 }
@@ -8,26 +10,30 @@ export const CommandExample = ({
   cmd,
   setCommand,
   commandPromptRef,
-}: CommandExampleProps) => (
-  <li>
-    <button
-      style={{ cursor: "pointer" }}
-      onClick={() => {
-        setCommand(cmd);
-        if (commandPromptRef.current) {
-          commandPromptRef.current.value = cmd;
-        }
-      }}
-      onKeyDown={(e) => {
-        if (e.key === "Enter" || e.key === " ") {
-          setCommand(cmd);
+}: CommandExampleProps) => {
+  const { emoji } = cmd;
+  const prefix = emoji ? `${emoji} ` : "▻ ";
+  return (
+    <li>
+      <button
+        style={{ cursor: "pointer" }}
+        onClick={() => {
+          setCommand(cmd.command);
           if (commandPromptRef.current) {
-            commandPromptRef.current.value = cmd;
+            commandPromptRef.current.value = cmd.command;
           }
-        }
-      }}
-    >
-      {`▻ ${cmd}`}
-    </button>
-  </li>
-);
+        }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            setCommand(cmd.command);
+            if (commandPromptRef.current) {
+              commandPromptRef.current.value = cmd.command;
+            }
+          }
+        }}
+      >
+        {`${prefix}${cmd.command}`}
+      </button>
+    </li>
+  );
+};
