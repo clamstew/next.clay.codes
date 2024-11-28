@@ -27,7 +27,7 @@ export const CommandExample = ({
         }
       }}
     >
-      {cmd}
+      {`▻ ${cmd}`}
     </button>
   </li>
 );

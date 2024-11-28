@@ -200,6 +200,7 @@ function App() {
         keyDownEventListener
       );
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [command, commandHistory, historyIndex, runCommand]);
 
   const commandsThatMatchPartialCommand = getMatchingCommands(
