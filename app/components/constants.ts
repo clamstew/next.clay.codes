@@ -8,6 +8,7 @@ export const goSiteToCommands = {
   "site code": "https://github.com/clamstew/next.clay.codes",
   notes: "https://notes.build",
   insulin: "https://fat-protein.netlify.app",
+  shop: "https://claycraftscode.myshopify.com",
 };
 
 export const terminalCommands = {
@@ -17,6 +18,7 @@ export const terminalCommands = {
   terminal: "terminal",
   clear: "clear",
   exit: "exit",
+  compgen: "compgen",
 };
 
 export const allCommands = [

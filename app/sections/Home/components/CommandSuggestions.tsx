@@ -16,7 +16,7 @@ export const CommandSuggestions = ({
   setCommand,
   commandPromptRef,
 }: CommandSuggestionsProps) => (
-  <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[530px] md:max-w-[94%]">
+  <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[100%] [@media(min-width:530px)]:w-[530px] max-w-[100%]">
     {(matchingCommands.length > 0 || command === "") && (
       <div className="font-bold">Commands to try:</div>
     )}
@@ -28,7 +28,7 @@ export const CommandSuggestions = ({
         </button>
       </div>
     )}
-    <div className="columns-2 mt-[10px]">
+    <div className="columns-1 [@media(min-width:400px)]:columns-2 mt-[10px]">
       <ul className="m-0">
         {command === "" &&
           allCommands.map((cmd) => (

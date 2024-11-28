@@ -75,6 +75,10 @@ function App() {
         setIsFullscreenTerminal(true);
       } else if (command === terminalCommands.exit) {
         setIsFullscreenTerminal(false);
+      } else if (command === terminalCommands.compgen) {
+        setCommandOutput(
+          `All commands:<br />${allCommands.join("<br />")}<br />${command}`
+        );
       } else {
         output = `bash: command not found: ${command}`;
         setCommandError(output);
@@ -85,6 +89,12 @@ function App() {
         ...commandHistory,
         { command, output, error: commandError },
       ]);
+
+      // clear prompt line
+      setCommand("");
+      if (commandPromptRef.current) {
+        commandPromptRef.current.value = "";
+      }
     },
     [commandHistory, commandError]
   );
