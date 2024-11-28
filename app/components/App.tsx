@@ -95,8 +95,8 @@ function App() {
           setCommandOutput(
             "Terminal mode activated. Press ESC to exit full screen. <br /><br />Type 'exit' to exit terminal mode, but stay fullscreen. <br /><br />'clear' is a nice abort command."
           );
-          document.documentElement.requestFullscreen();
           setIsFullscreenTerminal(true);
+          document.documentElement.requestFullscreen();
           break;
         }
 

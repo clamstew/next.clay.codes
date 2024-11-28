@@ -18,7 +18,7 @@ export const CommandSuggestions = ({
 }: CommandSuggestionsProps) => (
   <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[100%] [@media(min-width:530px)]:w-[530px] max-w-[100%]">
     {(matchingCommands.length > 0 || command === "") && (
-      <div className="font-bold">Commands to try:</div>
+      <h2 className="font-bold">Commands to try:</h2>
     )}
     {command !== "" && matchingCommands.length === 0 && (
       <div>
