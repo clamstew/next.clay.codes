@@ -1,6 +1,8 @@
 import { RefObject } from "react";
 import { CommandInput } from "../../Home/components/CommandInput";
 import { CommandOutput } from "../../Home/components/CommandOutput";
+import { allCommands } from "~/components/constants";
+import { CommandList } from "./CommandList";
 
 interface CommandHistoryItem {
   command: string;
@@ -23,6 +25,14 @@ export function FullscreenTerminal({
   commandError,
   commandOutput,
 }: FullscreenTerminalProps) {
+  const handleCommandClick = (command: string) => {
+    setCommand(command);
+    if (commandPromptRef.current) {
+      commandPromptRef.current.value = command;
+    }
+    // setCommandOutput("");
+  };
+
   return (
     <div className="min-h-screen bg-black p-4 text-green-500 font-mono">
       {/* Command History */}
@@ -39,7 +49,14 @@ export function FullscreenTerminal({
       </div>
 
       {/* Current Command Output */}
-      <CommandOutput error={commandError} output={commandOutput} />
+      {commandOutput === "::show-command-list::" ? (
+        <CommandList
+          commands={allCommands}
+          onCommandClick={handleCommandClick}
+        />
+      ) : (
+        <CommandOutput error={commandError} output={commandOutput} />
+      )}
 
       {/* Command Input */}
       <CommandInput

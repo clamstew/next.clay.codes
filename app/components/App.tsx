@@ -8,6 +8,7 @@ import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommand
 import { Title } from "../sections/Home/components/Title";
 import { Frame } from "~/sections/Home/components/Frame";
 import { FullscreenTerminal } from "../sections/Terminal/components/FullscreenTerminal";
+import { CommandList } from "../sections/Terminal/components/CommandList";
 
 interface CommandHistoryItem {
   command: string;
@@ -76,9 +77,7 @@ function App() {
       } else if (command === terminalCommands.exit) {
         setIsFullscreenTerminal(false);
       } else if (command === terminalCommands.compgen) {
-        setCommandOutput(
-          `All commands:<br />${allCommands.join("<br />")}<br />${command}`
-        );
+        setCommandOutput("::show-command-list::");
       } else {
         output = `bash: command not found: ${command}`;
         setCommandError(output);
@@ -168,6 +167,14 @@ function App() {
     command
   );
 
+  const handleCommandClick = useCallback((cmd: string) => {
+    if (commandPromptRef.current) {
+      commandPromptRef.current.value = cmd;
+      setCommand(cmd);
+      commandPromptRef.current.focus();
+    }
+  }, []);
+
   if (isFullscreenTerminal) {
     return (
       <FullscreenTerminal
@@ -180,6 +187,8 @@ function App() {
     );
   }
 
+  console.log("commandOutput", commandOutput);
+
   return (
     <Frame>
       {isFullscreenTerminal && <div>Fullscreen mode activated.</div>}
@@ -190,7 +199,14 @@ function App() {
         setCommand={setCommand}
       />
 
-      <CommandOutput error={commandError} output={commandOutput} />
+      {commandOutput === "::show-command-list::" ? (
+        <CommandList
+          commands={allCommands}
+          onCommandClick={handleCommandClick}
+        />
+      ) : (
+        <CommandOutput error={commandError} output={commandOutput} />
+      )}
 
       {!matchingCommandTyped && (
         <CommandSuggestions
