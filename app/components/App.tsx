@@ -76,6 +76,7 @@ function App() {
       <CommandInput
         commandPromptRef={commandPromptRef}
         setCommand={setCommand}
+        isFullscreenTerminal={false}
       />
 
       {/* specialized or fallback to general output */}

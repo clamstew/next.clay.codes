@@ -12,12 +12,6 @@ interface CommandHistoryItem {
   error: string;
 }
 
-// interface Command {
-//   command: string;
-//   output: string;
-//   error: string;
-// }
-
 interface FullscreenTerminalProps {
   commandHistory: CommandHistoryItem[];
   commandPromptRef: RefObject<HTMLInputElement>;
@@ -77,6 +71,7 @@ export function FullscreenTerminal({
       <CommandInput
         commandPromptRef={commandPromptRef}
         setCommand={setCommand}
+        isFullscreenTerminal={true}
       />
     </div>
   );
