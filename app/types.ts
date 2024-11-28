@@ -11,3 +11,8 @@ export enum EventKeyName {
   Enter = "Enter",
   Tab = "Tab",
 }
+
+export enum SpecialCommandOutputTokens {
+  ShowCommandList = "::show-command-list::",
+  ShowHelpList = "::show-help-list::",
+}
