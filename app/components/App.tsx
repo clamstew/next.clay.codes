@@ -47,12 +47,6 @@ function App() {
     [commandPromptRef, setCommand]
   );
 
-  const hideCommandSuggestions =
-    commandOutput === SpecialCommandOutputTokens.ShowCommandList ||
-    commandOutput === SpecialCommandOutputTokens.ShowHelpList ||
-    matchingCommandTyped ||
-    commandError;
-
   if (isFullscreenTerminal) {
     return (
       <FullscreenTerminal
@@ -67,6 +61,12 @@ function App() {
   }
 
   console.log("commandOutput", commandOutput);
+
+  const hideCommandSuggestions =
+    commandOutput === SpecialCommandOutputTokens.ShowCommandList ||
+    commandOutput === SpecialCommandOutputTokens.ShowHelpList ||
+    matchingCommandTyped ||
+    commandError;
 
   return (
     <Frame>
