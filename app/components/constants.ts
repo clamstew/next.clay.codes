@@ -19,6 +19,7 @@ export const terminalCommands = {
   clear: "clear",
   exit: "exit",
   compgen: "compgen",
+  help: "help",
 };
 
 export const allCommands = [

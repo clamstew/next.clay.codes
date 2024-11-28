@@ -9,6 +9,7 @@ import { Title } from "../sections/Home/components/Title";
 import { Frame } from "~/sections/Home/components/Frame";
 import { FullscreenTerminal } from "../sections/Terminal/components/FullscreenTerminal";
 import { CommandList } from "../sections/Terminal/components/CommandList";
+import { HelpList } from "../sections/Terminal/components/HelpList";
 
 interface CommandHistoryItem {
   command: string;
@@ -80,6 +81,8 @@ function App() {
         setIsFullscreenTerminal(false);
       } else if (command === terminalCommands.compgen) {
         setCommandOutput("::show-command-list::");
+      } else if (command === terminalCommands.help) {
+        setCommandOutput("::show-help-list::");
       } else {
         output = `bash: command not found: ${command}`;
         setCommandError(output);
@@ -177,6 +180,12 @@ function App() {
     }
   }, []);
 
+  const hideCommandSuggestions =
+    commandOutput === "::show-command-list::" ||
+    commandOutput === "::show-help-list::" ||
+    matchingCommandTyped ||
+    commandError;
+
   if (isFullscreenTerminal) {
     return (
       <FullscreenTerminal
@@ -206,11 +215,16 @@ function App() {
           commands={allCommands}
           onCommandClick={handleCommandClick}
         />
+      ) : commandOutput === "::show-help-list::" ? (
+        <HelpList
+          commands={terminalCommands}
+          onCommandClick={handleCommandClick}
+        />
       ) : (
         <CommandOutput error={commandError} output={commandOutput} />
       )}
 
-      {!matchingCommandTyped && (
+      {!matchingCommandTyped && !hideCommandSuggestions && (
         <CommandSuggestions
           matchingCommands={commandsThatMatchPartialCommand}
           command={command}
