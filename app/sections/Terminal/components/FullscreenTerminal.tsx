@@ -1,6 +1,6 @@
 import { RefObject } from "react";
-import { CommandInput } from "../sections/Home/components/CommandInput";
-import { CommandOutput } from "../sections/Home/components/CommandOutput";
+import { CommandInput } from "../../Home/components/CommandInput";
+import { CommandOutput } from "../../Home/components/CommandOutput";
 
 interface CommandHistoryItem {
   command: string;

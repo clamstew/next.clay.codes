@@ -7,7 +7,7 @@ import { CommandOutput } from "../sections/Home/components/CommandOutput";
 import { MatchedCommandOutput } from "../sections/Home/components/MatchedCommandOutput";
 import { Title } from "../sections/Home/components/Title";
 import { Frame } from "~/sections/Home/components/Frame";
-import { FullscreenTerminal } from "./FullscreenTerminal";
+import { FullscreenTerminal } from "../sections/Terminal/components/FullscreenTerminal";
 
 interface CommandHistoryItem {
   command: string;
