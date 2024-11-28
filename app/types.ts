@@ -8,7 +8,7 @@ export interface CommandHistoryItem {
   rawCommand: Command | undefined; // undefined if command is not found in allCommands
 }
 
-export interface Command {
+export type Command = {
   command: string;
   title: string;
   description: string;
@@ -16,7 +16,8 @@ export interface Command {
   subCommands?: SubCommand[];
   output?: string;
   error?: string;
-}
+  emoji?: string;
+};
 
 interface SubCommand {
   command: string;
