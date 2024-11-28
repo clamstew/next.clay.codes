@@ -33,6 +33,7 @@ function App() {
     []
   );
   const [isFullscreenTerminal, setIsFullscreenTerminal] = useState(false);
+  const [historyIndex, setHistoryIndex] = useState(-1);
 
   const runCommand = useCallback(
     (command: string) => {
@@ -96,6 +97,7 @@ function App() {
 
       // clear prompt line
       setCommand("");
+      setHistoryIndex(-1);
       if (commandPromptRef.current) {
         commandPromptRef.current.value = "";
       }
@@ -125,7 +127,37 @@ function App() {
     };
 
     const keyDownEventListener = (event: KeyboardEvent) => {
-      if (event.which === 27 && event.shiftKey === false) {
+      if (event.key === "ArrowUp") {
+        event.preventDefault();
+        if (commandHistory.length > 0) {
+          const newIndex =
+            historyIndex < commandHistory.length - 1
+              ? historyIndex + 1
+              : historyIndex;
+          setHistoryIndex(newIndex);
+          const historicCommand =
+            commandHistory[commandHistory.length - 1 - newIndex]?.command || "";
+          setCommand(historicCommand);
+          if (commandPromptRef.current) {
+            commandPromptRef.current.value = historicCommand;
+          }
+        }
+      } else if (event.key === "ArrowDown") {
+        event.preventDefault();
+        if (historyIndex > -1) {
+          const newIndex = historyIndex - 1;
+          setHistoryIndex(newIndex);
+          const historicCommand =
+            newIndex === -1
+              ? ""
+              : commandHistory[commandHistory.length - 1 - newIndex]?.command ||
+                "";
+          setCommand(historicCommand);
+          if (commandPromptRef.current) {
+            commandPromptRef.current.value = historicCommand;
+          }
+        }
+      } else if (event.which === 27 && event.shiftKey === false) {
         event.preventDefault();
         setCommand("");
         setCommandError("");
@@ -151,7 +183,7 @@ function App() {
         keyDownEventListener
       );
     };
-  }, [command, commandHistory, runCommand]);
+  }, [command, commandHistory, historyIndex, runCommand]);
 
   const commandsThatMatchPartialCommand = getMatchingCommands(
     command,
