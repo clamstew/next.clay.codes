@@ -95,6 +95,9 @@ function App() {
       if (commandPromptRef.current) {
         commandPromptRef.current.value = "";
       }
+      setTimeout(() => {
+        commandPromptRef.current?.scrollIntoView({ behavior: "smooth" });
+      }, 100);
     },
     [commandHistory, commandError]
   );
