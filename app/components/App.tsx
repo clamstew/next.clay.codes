@@ -42,9 +42,10 @@ function App() {
   const runCommand = useCallback(
     (command: string) => {
       let output = "";
+      const tc = terminalCommands;
 
       switch (command) {
-        // Handle site commands
+        // Handle open site commands
         case Object.keys(goSiteToCommands).find((cmd) => cmd === command): {
           const site =
             goSiteToCommands[command as keyof typeof goSiteToCommands];
@@ -58,7 +59,7 @@ function App() {
         }
 
         // Terminal commands
-        case terminalCommands.history: {
+        case tc.history: {
           const historyString = `${commandHistory
             .map((historyItem) => `* ${historyItem.command}`)
             .join("<br />")}<br />* ${command}`;
@@ -66,19 +67,19 @@ function App() {
           break;
         }
 
-        case terminalCommands.fullscreen: {
+        case tc.fullscreen: {
           document.documentElement.requestFullscreen();
           setCommandOutput("Fullscreen mode activated.");
           break;
         }
 
-        case terminalCommands.minimize: {
+        case tc.minimize: {
           document.exitFullscreen();
           setCommandOutput("Minimized mode activated.");
           break;
         }
 
-        case terminalCommands.clear: {
+        case tc.clear: {
           setCommandOutput("");
           setCommand("");
           setIsFullscreenTerminal(false);
@@ -91,7 +92,7 @@ function App() {
           break;
         }
 
-        case terminalCommands.terminal: {
+        case tc.terminal: {
           setCommandOutput(
             "Terminal mode activated. Press ESC to exit full screen. <br /><br />Type 'exit' to exit terminal mode, but stay fullscreen. <br /><br />'clear' is a nice abort command."
           );
@@ -100,17 +101,17 @@ function App() {
           break;
         }
 
-        case terminalCommands.exit: {
+        case tc.exit: {
           setIsFullscreenTerminal(false);
           break;
         }
 
-        case terminalCommands.compgen: {
+        case tc.compgen: {
           setCommandOutput("::show-command-list::");
           break;
         }
 
-        case terminalCommands.help: {
+        case tc.help: {
           setCommandOutput("::show-help-list::");
           break;
         }
@@ -160,61 +161,82 @@ function App() {
     };
 
     const keyDownEventListener = (event: KeyboardEvent) => {
-      if (event.key === "ArrowUp") {
-        event.preventDefault();
-        if (commandHistory.length > 0) {
-          const newIndex = getNextHistoryIndex(historyIndex, commandHistory);
-          setHistoryIndex(newIndex);
-          const historicCommand =
-            commandHistory[commandHistory.length - 1 - newIndex]?.command || "";
-          setCommand(historicCommand);
-          if (commandPromptRef.current) {
-            commandPromptRef.current.value = historicCommand;
+      switch (event.key) {
+        case "ArrowUp": {
+          event.preventDefault();
+          if (commandHistory.length > 0) {
+            const newIndex = getNextHistoryIndex(historyIndex, commandHistory);
+            setHistoryIndex(newIndex);
+            const historicCommand =
+              commandHistory[commandHistory.length - 1 - newIndex]?.command ||
+              "";
+            setCommand(historicCommand);
+            if (commandPromptRef.current) {
+              commandPromptRef.current.value = historicCommand;
+            }
           }
+          break;
         }
-      } else if (event.key === "ArrowDown") {
-        event.preventDefault();
-        if (historyIndex > -1) {
-          const newIndex = historyIndex - 1;
-          setHistoryIndex(newIndex);
-          const historicCommand =
-            newIndex === -1
-              ? ""
-              : commandHistory[commandHistory.length - 1 - newIndex]?.command ||
-                "";
-          setCommand(historicCommand);
-          if (commandPromptRef.current) {
-            commandPromptRef.current.value = historicCommand;
+
+        case "ArrowDown": {
+          event.preventDefault();
+          if (historyIndex > -1) {
+            const newIndex = historyIndex - 1;
+            setHistoryIndex(newIndex);
+            const historicCommand =
+              newIndex === -1
+                ? ""
+                : commandHistory[commandHistory.length - 1 - newIndex]
+                    ?.command || "";
+            setCommand(historicCommand);
+            if (commandPromptRef.current) {
+              commandPromptRef.current.value = historicCommand;
+            }
           }
+          break;
         }
-      } else if (event.key === "Escape" && !event.shiftKey) {
-        event.preventDefault();
-        setCommand("");
-        setCommandError("");
-        setCommandOutput("");
-        setIsFullscreenTerminal(false);
-        if (document.fullscreenElement) {
-          document.exitFullscreen();
+
+        case "Escape": {
+          if (!event.shiftKey) {
+            event.preventDefault();
+            setCommand("");
+            setCommandError("");
+            setCommandOutput("");
+            setIsFullscreenTerminal(false);
+            if (document.fullscreenElement) {
+              document.exitFullscreen();
+            }
+            if (commandPromptRef.current) {
+              commandPromptRef.current.value = "";
+            }
+          }
+          break;
         }
-        if (commandPromptRef.current) {
-          commandPromptRef.current.value = "";
+
+        case "Enter": {
+          if (!event.shiftKey) {
+            event.preventDefault();
+            runCommandAlias(command.toLowerCase());
+          }
+          break;
         }
-      } else if (event.key === "Enter" && !event.shiftKey) {
-        event.preventDefault();
-        runCommandAlias(command.toLowerCase());
-      } else if (
-        event.key === "Tab" &&
-        commandsThatMatchPartialCommand.length === 1
-      ) {
-        event.preventDefault();
-        const matchedCommand = commandsThatMatchPartialCommand[0];
-        setCommand(matchedCommand);
-        if (commandPromptRef.current) {
-          commandPromptRef.current.value = matchedCommand;
+
+        case "Tab": {
+          if (commandsThatMatchPartialCommand.length === 1) {
+            event.preventDefault();
+            const matchedCommand = commandsThatMatchPartialCommand[0];
+            setCommand(matchedCommand);
+            if (commandPromptRef.current) {
+              commandPromptRef.current.value = matchedCommand;
+            }
+          }
+          break;
         }
-      } else {
-        setCommandError("");
-        setCommandOutput("");
+
+        default: {
+          setCommandError("");
+          setCommandOutput("");
+        }
       }
     };
 
