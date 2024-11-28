@@ -2,6 +2,10 @@ export interface CommandHistoryItem {
   command: string;
   output: string;
   error: string;
+  timestamp: number;
+  isFullscreenTerminal: boolean;
+  historyIndex: number;
+  rawCommand: Command | undefined; // undefined if command is not found in allCommands
 }
 
 export interface Command {

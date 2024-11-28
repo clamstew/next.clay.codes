@@ -9,6 +9,7 @@ import { EventKeyName, SpecialCommandOutputTokens } from "~/types";
 import { updateCommandPromptValue } from "~/components/App";
 import { getMatchingCommands } from "../commands-utils";
 import { delayOpenSite, safeExitFullscreen } from "../browser";
+
 const detectMatchingCommandFound = (
   matchingCommands: string[],
   command: string
@@ -141,7 +142,15 @@ function useCliState() {
       // add command to command history
       setCommandHistory([
         ...commandHistory,
-        { command, output, error: commandError },
+        {
+          command,
+          output,
+          error: commandError,
+          timestamp: Date.now(),
+          isFullscreenTerminal,
+          historyIndex,
+          rawCommand: allCommands.find((cmd) => cmd.command === command),
+        },
       ]);
 
       // clear prompt line
@@ -151,7 +160,7 @@ function useCliState() {
       updateCommandPromptValue(commandPromptRef, "");
       scrollToCommandPrompt(commandPromptRef);
     },
-    [commandHistory, commandError]
+    [commandHistory, commandError, isFullscreenTerminal, historyIndex]
   );
 
   useEffect(() => {
