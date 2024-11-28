@@ -30,6 +30,8 @@ export const CommandExample = ({
             }
           }
         }}
+        aria-label={cmd.description}
+        title={cmd.description}
       >
         {`${prefix}${cmd.command}`}
       </button>

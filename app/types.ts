@@ -8,6 +8,8 @@ export interface CommandHistoryItem {
   rawCommand: Command | undefined; // undefined if command is not found in allCommands
 }
 
+export type CommandType = "webpage-shortcut" | "terminal";
+
 export type Command = {
   command: string;
   title: string;
@@ -18,6 +20,14 @@ export type Command = {
   error?: string;
   emoji?: string;
   tags?: string[];
+  type: CommandType;
+  status?:
+    | "active"
+    | "inactive"
+    | "coming-soon"
+    | "listed"
+    | "unlisted"
+    | "hidden-in-hiring-mode";
 };
 
 interface SubCommand {

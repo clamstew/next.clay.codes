@@ -8,6 +8,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://github.com/clamstew",
     emoji: "🐙",
     tags: ["github", "open source"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   "hire me": {
     command: "hire me",
@@ -16,6 +18,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://www.linkedin.com/in/claystewart/",
     emoji: "💼",
     tags: ["linkedin", "professional"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   x: {
     command: "x",
@@ -24,6 +28,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://x.com/Clay_Stewart",
     emoji: "🐦",
     tags: ["x", "twitter"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   bsky: {
     command: "bsky",
@@ -32,6 +38,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://bsky.app/profile/clay.codes",
     emoji: "☁️",
     tags: ["bluesky"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   asdf: {
     command: "asdf",
@@ -40,6 +48,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://github.com/asdf-vm/asdf",
     emoji: "🔧",
     tags: ["asdf", "version manager"],
+    type: "webpage-shortcut",
+    status: "unlisted",
   },
   "site code": {
     command: "site code",
@@ -48,6 +58,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://github.com/clamstew/next.clay.codes",
     emoji: "💻",
     tags: ["github", "open source"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   notes: {
     command: "notes",
@@ -56,6 +68,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://notes.build",
     emoji: "📝",
     tags: ["notes"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   insulin: {
     command: "insulin",
@@ -64,6 +78,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://fat-protein.netlify.app",
     emoji: "💉",
     tags: ["insulin", "calculator", "health", "tools", "entertainment"],
+    type: "webpage-shortcut",
+    status: "active",
   },
   shop: {
     command: "shop",
@@ -72,6 +88,8 @@ export const goSiteCommands: Record<string, Command> = {
     url: "https://claycraftscode.myshopify.com",
     emoji: "🛍️",
     tags: ["shop"],
+    type: "webpage-shortcut",
+    status: "active",
   },
 };
 
@@ -82,6 +100,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Show previously executed commands",
     emoji: "📜",
     tags: ["terminal", "history"],
+    type: "terminal",
+    status: "active",
   },
   fullscreen: {
     command: "fullscreen",
@@ -89,6 +109,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Enter fullscreen mode",
     emoji: "🔍",
     tags: ["terminal", "fullscreen"],
+    type: "terminal",
+    status: "active",
   },
   minimize: {
     command: "minimize",
@@ -96,6 +118,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Exit fullscreen mode",
     emoji: "⬇️",
     tags: ["terminal", "fullscreen"],
+    type: "terminal",
+    status: "active",
   },
   terminal: {
     command: "terminal",
@@ -103,6 +127,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Enter terminal mode with fullscreen",
     emoji: "🖥️",
     tags: ["terminal", "fullscreen"],
+    type: "terminal",
+    status: "active",
   },
   clear: {
     command: "clear",
@@ -110,6 +136,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Clear the terminal screen",
     emoji: "🧹",
     tags: ["terminal", "reset", "exit"],
+    type: "terminal",
+    status: "active",
   },
   exit: {
     command: "exit",
@@ -117,6 +145,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Exit terminal mode",
     emoji: "🚪",
     tags: ["terminal", "reset", "exit"],
+    type: "terminal",
+    status: "active",
   },
   compgen: {
     command: "compgen",
@@ -124,6 +154,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Show all available commands",
     emoji: "📋",
     tags: ["terminal", "list"],
+    type: "terminal",
+    status: "active",
   },
   help: {
     command: "help",
@@ -131,6 +163,8 @@ export const terminalCommands: Record<string, Command> = {
     description: "Show help information for commands",
     emoji: "❓",
     tags: ["terminal", "help"],
+    type: "terminal",
+    status: "active",
   },
 };
 

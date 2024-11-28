@@ -31,14 +31,16 @@ export const CommandSuggestions = ({
     <div className="columns-1 [@media(min-width:400px)]:columns-2 mt-[10px] hidden [@media(min-width:60px)]:block">
       <ul className="m-0">
         {command === "" &&
-          allCommands.map((cmd) => (
-            <CommandExample
-              key={cmd.command}
-              cmd={cmd}
-              setCommand={setCommand}
-              commandPromptRef={commandPromptRef}
-            />
-          ))}
+          allCommands
+            .filter((cmd) => cmd.status !== "unlisted")
+            .map((cmd) => (
+              <CommandExample
+                key={cmd.command}
+                cmd={cmd}
+                setCommand={setCommand}
+                commandPromptRef={commandPromptRef}
+              />
+            ))}
         {command !== "" &&
           matchingCommands.map((cmd) => (
             <CommandExample
