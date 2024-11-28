@@ -173,6 +173,16 @@ function App() {
       } else if (event.key === "Enter" && !event.shiftKey) {
         event.preventDefault();
         runCommandAlias(command.toLowerCase());
+      } else if (
+        event.key === "Tab" &&
+        commandsThatMatchPartialCommand.length === 1
+      ) {
+        event.preventDefault();
+        const matchedCommand = commandsThatMatchPartialCommand[0];
+        setCommand(matchedCommand);
+        if (commandPromptRef.current) {
+          commandPromptRef.current.value = matchedCommand;
+        }
       } else {
         setCommandError("");
         setCommandOutput("");
