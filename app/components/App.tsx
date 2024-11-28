@@ -19,6 +19,15 @@ const detectMatchingCommandFound = (
   return matchingCommands.length === 1 && matchingCommands[0] === command;
 };
 
+const getNextHistoryIndex = (
+  historyIndex: number,
+  commandHistory: CommandHistoryItem[]
+): number => {
+  return historyIndex < commandHistory.length - 1
+    ? historyIndex + 1
+    : historyIndex;
+};
+
 function App() {
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
@@ -41,6 +50,7 @@ function App() {
             goSiteToCommands[command as keyof typeof goSiteToCommands];
           output = `Opening site: ${site}`;
           setCommandOutput(output);
+          // timeout to allow command output to show
           setTimeout(() => {
             window.open(site, "_blank");
           }, 600);
@@ -153,10 +163,7 @@ function App() {
       if (event.key === "ArrowUp") {
         event.preventDefault();
         if (commandHistory.length > 0) {
-          const newIndex =
-            historyIndex < commandHistory.length - 1
-              ? historyIndex + 1
-              : historyIndex;
+          const newIndex = getNextHistoryIndex(historyIndex, commandHistory);
           setHistoryIndex(newIndex);
           const historicCommand =
             commandHistory[commandHistory.length - 1 - newIndex]?.command || "";
