@@ -10,12 +10,7 @@ import { Frame } from "~/sections/Home/components/Frame";
 import { FullscreenTerminal } from "../sections/Terminal/components/FullscreenTerminal";
 import { CommandList } from "../sections/Terminal/components/CommandList";
 import { HelpList } from "../sections/Terminal/components/HelpList";
-
-interface CommandHistoryItem {
-  command: string;
-  output: string;
-  error: string;
-}
+import type { CommandHistoryItem } from "../types";
 
 const detectMatchingCommandFound = (
   matchingCommands: string[],
@@ -38,55 +33,82 @@ function App() {
   const runCommand = useCallback(
     (command: string) => {
       let output = "";
-      if (goSiteToCommands[command as keyof typeof goSiteToCommands]) {
-        output = `Opening site: ${
-          goSiteToCommands[command as keyof typeof goSiteToCommands]
-        }`;
-        setCommandOutput(output);
-        // delay for a hot second, so user can see the output
-        setTimeout(() => {
-          window.open(
-            goSiteToCommands[command as keyof typeof goSiteToCommands],
-            "_blank"
-          );
-        }, 600);
-      } else if (command === terminalCommands.history) {
-        // print history
-        const historyString = `${commandHistory
-          .map((historyItem) => historyItem.command)
-          .join("<br />")}<br />${command}`;
-        setCommandOutput(historyString);
-      } else if (command === terminalCommands.fullscreen) {
-        document.documentElement.requestFullscreen();
-        setCommandOutput("Fullscreen mode activated.");
-      } else if (command === terminalCommands.minimize) {
-        document.exitFullscreen();
-        setCommandOutput("Minimized mode activated.");
-      } else if (command === terminalCommands.clear) {
-        setCommandOutput("");
-        setCommand("");
-        setIsFullscreenTerminal(false);
-        if (commandPromptRef.current) {
-          commandPromptRef.current.value = "";
+
+      switch (command) {
+        // Handle site commands
+        case Object.keys(goSiteToCommands).find((cmd) => cmd === command): {
+          const site =
+            goSiteToCommands[command as keyof typeof goSiteToCommands];
+          output = `Opening site: ${site}`;
+          setCommandOutput(output);
+          setTimeout(() => {
+            window.open(site, "_blank");
+          }, 600);
+          break;
         }
-        if (document.fullscreenElement) {
+
+        // Terminal commands
+        case terminalCommands.history: {
+          const historyString = `${commandHistory
+            .map((historyItem) => `* ${historyItem.command}`)
+            .join("<br />")}<br />* ${command}`;
+          setCommandOutput(historyString);
+          break;
+        }
+
+        case terminalCommands.fullscreen: {
+          document.documentElement.requestFullscreen();
+          setCommandOutput("Fullscreen mode activated.");
+          break;
+        }
+
+        case terminalCommands.minimize: {
           document.exitFullscreen();
+          setCommandOutput("Minimized mode activated.");
+          break;
         }
-      } else if (command === terminalCommands.terminal) {
-        setCommandOutput(
-          "Terminal mode activated. Press ESC to exit full screen. <br /><br />Type 'exit' to exit terminal mode, but stay fullscreen. <br /><br />'clear' is a nice abort command."
-        );
-        document.documentElement.requestFullscreen();
-        setIsFullscreenTerminal(true);
-      } else if (command === terminalCommands.exit) {
-        setIsFullscreenTerminal(false);
-      } else if (command === terminalCommands.compgen) {
-        setCommandOutput("::show-command-list::");
-      } else if (command === terminalCommands.help) {
-        setCommandOutput("::show-help-list::");
-      } else {
-        output = `bash: command not found: ${command}`;
-        setCommandError(output);
+
+        case terminalCommands.clear: {
+          setCommandOutput("");
+          setCommand("");
+          setIsFullscreenTerminal(false);
+          if (commandPromptRef.current) {
+            commandPromptRef.current.value = "";
+          }
+          if (document.fullscreenElement) {
+            document.exitFullscreen();
+          }
+          break;
+        }
+
+        case terminalCommands.terminal: {
+          setCommandOutput(
+            "Terminal mode activated. Press ESC to exit full screen. <br /><br />Type 'exit' to exit terminal mode, but stay fullscreen. <br /><br />'clear' is a nice abort command."
+          );
+          document.documentElement.requestFullscreen();
+          setIsFullscreenTerminal(true);
+          break;
+        }
+
+        case terminalCommands.exit: {
+          setIsFullscreenTerminal(false);
+          break;
+        }
+
+        case terminalCommands.compgen: {
+          setCommandOutput("::show-command-list::");
+          break;
+        }
+
+        case terminalCommands.help: {
+          setCommandOutput("::show-help-list::");
+          break;
+        }
+
+        default: {
+          output = `bash: command not found: ${command}`;
+          setCommandError(output);
+        }
       }
 
       // add command to command history
