@@ -1,5 +1,6 @@
 import { CommandExample } from "./CommandExample";
 import { allCommands } from "../../../components/constants";
+import cn from "classnames";
 
 interface CommandSuggestionsProps {
   matchingCommands: string[];
@@ -16,7 +17,11 @@ export const CommandSuggestions = ({
   setCommand,
   commandPromptRef,
 }: CommandSuggestionsProps) => (
-  <div className="text-white border border-white box-border text-left p-[15px] text-[16px] w-[100%] [@media(min-width:530px)]:w-[530px] max-w-[100%]">
+  <div
+    className={cn(
+      "text-white border border-white box-border text-left p-[15px] text-[16px] w-[100%] [@media(min-width:530px)]:w-[530px] max-w-[100%] [@media(max-width:600px)]:absolute [@media(max-width:600px)]:bottom-0 [@media(max-width:600px)]:left-0 [@media(max-width:600px)]:right-0"
+    )}
+  >
     {(matchingCommands.length > 0 || command === "") && (
       <h2 className="font-bold">Commands to try:</h2>
     )}

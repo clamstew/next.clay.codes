@@ -23,9 +23,10 @@ export const CommandInput = ({
   return (
     <div
       className={cn(
+        "w-full [@media(min-width:600px)]:w-[500px] ",
         commandOutput || commandError
-          ? "w-full [@media(min-width:600px)]:w-[500px] [@media(min-width:600px)]:mt-[50px] mt-[10px]"
-          : "w-full [@media(min-width:600px)]:w-[500px] [@media(min-width:600px)]:my-[50px] my-[10px]"
+          ? "[@media(min-width:600px)]:mt-[50px] mt-[10px]"
+          : "[@media(min-width:600px)]:my-[50px] my-[10px]"
       )}
     >
       <div className="flex items-center">
