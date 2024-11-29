@@ -47,6 +47,7 @@ function App() {
     [commandPromptRef, setCommand]
   );
 
+  // TODO: remove this and set state in runCommand
   if (command === "rm -rf") {
     return (
       <div className="bg-black text-white text-left w-full mb-[30px] absolute top-0 left-0 h-full flex items-center justify-center text-[40px]">
@@ -54,6 +55,8 @@ function App() {
       </div>
     );
   }
+
+  console.log("commandOutput", commandOutput);
 
   if (isFullscreenTerminal) {
     return (
@@ -67,8 +70,6 @@ function App() {
       />
     );
   }
-
-  console.log("commandOutput", commandOutput);
 
   const hideCommandSuggestions =
     commandOutput === SpecialCommandOutputTokens.ShowCommandList ||
