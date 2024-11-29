@@ -180,3 +180,5 @@ export const goSiteToCommands = Object.fromEntries(
     .map((cmd) => [cmd.command, cmd.url])
     .filter(([, url]) => Boolean(url))
 );
+
+export const isDev = process.env.NODE_ENV === "development";

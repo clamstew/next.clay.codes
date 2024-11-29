@@ -22,14 +22,14 @@ export const CommandInput = ({
 
   return (
     <div
-      className={
+      className={cn(
         commandOutput || commandError
-          ? "[@media(min-width:530px)]:mt-[50px] mt-[10px]"
-          : "[@media(min-width:530px)]:my-[50px] my-[10px]"
-      }
+          ? "w-full [@media(min-width:600px)]:w-[500px] [@media(min-width:600px)]:mt-[50px] mt-[10px]"
+          : "w-full [@media(min-width:600px)]:w-[500px] [@media(min-width:600px)]:my-[50px] my-[10px]"
+      )}
     >
       <div className="flex items-center">
-        <div className="inline-block text-white text-[40px]">$&gt;</div>
+        <div className="inline-block text-white text-[40px]">$&gt;&nbsp;</div>
         <input
           ref={commandPromptRef}
           spellCheck="false"
@@ -39,9 +39,9 @@ export const CommandInput = ({
           onChange={(e) => setCommand(e.target.value)}
           placeholder="run a command ..."
           className={cn(
-            "inline-block bg-[#282c34] text-white border-none outline-none w-full [@media(min-width:400px)]:w-[500px] h-[46px] text-[30px] md:max-w-[94%]",
+            "inline-block bg-[#282c34] text-white border-none outline-none w-full [@media(min-width:600px)]:w-[500px] h-[46px] text-[30px] md:max-w-[94%]",
             {
-              "w-[100%]": isFullscreenTerminal,
+              "w-full": isFullscreenTerminal,
               "bg-black": isFullscreenTerminal,
             }
           )}
