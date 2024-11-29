@@ -6,11 +6,13 @@ interface CommandOutputProps {
 export const CommandOutput = ({ error, output }: CommandOutputProps) => (
   <>
     {error && (
-      <div className="text-red-500 text-left w-[548px] mb-[30px]">{error}</div>
+      <div className="text-red-500 text-left w-full [@media(min-width:600px)]:w-[548px] mb-[30px]">
+        {error}
+      </div>
     )}
     {output && (
       <div
-        className="text-green-500 text-left w-[548px] mb-[30px]"
+        className="text-green-500 text-left w-full [@media(min-width:600px)]:w-[548px] mb-[30px]"
         dangerouslySetInnerHTML={{ __html: output }}
       />
     )}
