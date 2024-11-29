@@ -166,6 +166,15 @@ export const terminalCommands: Record<string, Command> = {
     type: "terminal",
     status: "active",
   },
+  "rm -rf": {
+    command: "rm -rf",
+    title: "Delete Everything",
+    description: "Delete everything in the current directory",
+    emoji: "💥",
+    tags: ["terminal", "delete"],
+    type: "terminal",
+    status: "unlisted",
+  },
 };
 
 // Helper to extract just the command strings for backwards compatibility

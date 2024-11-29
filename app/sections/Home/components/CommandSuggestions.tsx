@@ -42,14 +42,20 @@ export const CommandSuggestions = ({
               />
             ))}
         {command !== "" &&
-          matchingCommands.map((cmd) => (
-            <CommandExample
-              key={cmd}
-              cmd={allCommands.find((c) => c.command === cmd)!}
-              setCommand={setCommand}
-              commandPromptRef={commandPromptRef}
-            />
-          ))}
+          matchingCommands
+            .filter(
+              (cmd) =>
+                allCommands.find((c) => c.command === cmd)?.status !==
+                "unlisted"
+            )
+            .map((cmd) => (
+              <CommandExample
+                key={cmd}
+                cmd={allCommands.find((c) => c.command === cmd)!}
+                setCommand={setCommand}
+                commandPromptRef={commandPromptRef}
+              />
+            ))}
       </ul>
     </div>
     <div className="block [@media(min-width:60px)]:hidden text-center text-2xl">

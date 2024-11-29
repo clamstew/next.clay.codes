@@ -133,6 +133,11 @@ function useCliState() {
           break;
         }
 
+        case tc["rm -rf"].command: {
+          setCommandOutput("💥");
+          break;
+        }
+
         default: {
           output = `bash: command not found: ${command}`;
           setCommandError(output);
