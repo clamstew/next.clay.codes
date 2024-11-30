@@ -1,9 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
-import {
-  allCommands,
-  goSiteToCommands,
-  terminalCommands,
-} from "~/components/constants";
+import { allCommands, goSiteToCommands } from "~/components/constants";
+import { terminalCommands } from "~/db/commands/terminal-commands";
 import type { CommandHistoryItem } from "~/types";
 import { EventKeyName, SpecialCommandOutputTokens } from "~/types";
 import { updateCommandPromptValue } from "~/components/App";

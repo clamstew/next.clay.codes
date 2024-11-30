@@ -1,5 +1,6 @@
 import { useCallback } from "react";
-import { terminalCommands, allCommands } from "./constants";
+import { allCommands } from "./constants";
+import { terminalCommands } from "~/db/commands/terminal-commands";
 import { CommandInput } from "../sections/Home/components/CommandInput";
 import { CommandSuggestions } from "../sections/Home/components/CommandSuggestions";
 import { CommandOutput } from "../sections/Home/components/CommandOutput";
