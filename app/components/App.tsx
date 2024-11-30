@@ -30,6 +30,7 @@ function App() {
     commandOutput,
     commandHistory,
     isFullscreenTerminal,
+    setIsFullscreenTerminal,
     runCommand,
     tryAgain,
     matchingCommandTyped,
@@ -68,6 +69,7 @@ function App() {
         commandError={commandError}
         commandOutput={commandOutput}
         terminalCommands={terminalCommands}
+        setIsFullscreenTerminal={setIsFullscreenTerminal}
       />
     );
   }
@@ -81,7 +83,10 @@ function App() {
   return (
     <Frame>
       {isFullscreenTerminal && <div>Fullscreen mode activated.</div>}
-      <Title />
+      <Title
+        isFullscreenTerminal={false}
+        setIsFullscreenTerminal={setIsFullscreenTerminal}
+      />
 
       <CommandInput
         commandPromptRef={commandPromptRef}

@@ -287,6 +287,7 @@ function useCliState() {
     commandOutput,
     commandHistory,
     isFullscreenTerminal,
+    setIsFullscreenTerminal,
     historyIndex,
     runCommand,
     tryAgain,

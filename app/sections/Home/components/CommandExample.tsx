@@ -14,7 +14,7 @@ export const CommandExample = ({
   setCommand,
   commandPromptRef,
 }: CommandExampleProps) => {
-  const prefix = cmd?.emoji ? `${cmd.emoji} ` : `${ARROW_EMOJI} `;
+  const prefix = cmd?.emoji ? `${cmd.emoji}    ` : `${ARROW_EMOJI}   `;
   const isTerminalCommand = cmd.type === "terminal";
   const isGoToSiteCommand = cmd.type === "webpage-shortcut";
   return (
