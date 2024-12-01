@@ -6,6 +6,7 @@ import { EventKeyName, SpecialCommandOutputTokens } from "~/types";
 import { updateCommandPromptValue } from "~/components/App";
 import { getMatchingCommands } from "../commands-utils";
 import { delayOpenSite, safeExitFullscreen } from "../browser";
+import { useTranslation } from "react-i18next";
 
 const detectMatchingCommandFound = (
   matchingCommands: string[],
@@ -50,6 +51,8 @@ const scrollToCommandPrompt = (
 };
 
 function useCliState() {
+  const { t } = useTranslation("common");
+
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
   const [commandError, setCommandError] = useState("");
@@ -87,13 +90,13 @@ function useCliState() {
 
         case tc.fullscreen.command: {
           document.documentElement.requestFullscreen();
-          setCommandOutput("Fullscreen mode activated.");
+          setCommandOutput(t("terminal.fullscreen"));
           break;
         }
 
         case tc.minimize.command: {
           safeExitFullscreen();
-          setCommandOutput("Minimized mode activated.");
+          setCommandOutput(t("terminal.minimize"));
           break;
         }
 
@@ -107,9 +110,7 @@ function useCliState() {
         }
 
         case tc.terminal.command: {
-          setCommandOutput(
-            "Terminal mode activated. Press ESC to exit full screen. <br /><br />Type 'exit' to exit terminal mode, but stay fullscreen. <br /><br />'clear' is a nice abort command."
-          );
+          setCommandOutput(t("terminal.postFullscreenActivated"));
           setIsFullscreenTerminal(true);
           document.documentElement.requestFullscreen();
           break;
