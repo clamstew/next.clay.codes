@@ -1,9 +1,3 @@
-// interface Command {
-//   command: string;
-//   title: string;
-//   description: string;
-// }
-
 import type { Command } from "~/types";
 
 interface HelpListProps {
@@ -12,7 +6,7 @@ interface HelpListProps {
 }
 
 export const HelpList = ({ commands, onCommandClick }: HelpListProps) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 text-left">
     <div className="text-white/80">
       Available commands and their descriptions:
     </div>

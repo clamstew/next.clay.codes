@@ -163,7 +163,7 @@ function useCliState() {
       updateCommandPromptValue(commandPromptRef, "");
       scrollToCommandPrompt(commandPromptRef);
     },
-    [commandHistory, commandError, isFullscreenTerminal, historyIndex]
+    [commandHistory, commandError, isFullscreenTerminal, historyIndex, t]
   );
 
   useEffect(() => {

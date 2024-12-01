@@ -6,7 +6,7 @@ interface CommandListProps {
 }
 
 export const CommandList = ({ commands, onCommandClick }: CommandListProps) => (
-  <div className="flex flex-col gap-1">
+  <div className="flex flex-col gap-1 text-left">
     <div className="text-white/80">Available commands:</div>
     {commands.map((cmd) => (
       <div key={cmd.command} className="flex flex-col gap-0.5 mb-2">
