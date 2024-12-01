@@ -16,8 +16,10 @@ export type Command = {
   description: string;
   url?: string;
   subCommands?: SubCommand[];
-  output?: string;
-  error?: string;
+  // output, error can likely be removed
+  // makes sense to use CommandHistoryItem.output instead
+  // output?: string;
+  // error?: string;
   emoji?: string;
   tags?: string[];
   type: CommandType;

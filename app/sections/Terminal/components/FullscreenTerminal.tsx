@@ -5,14 +5,8 @@ import { allCommands } from "~/components/constants";
 import { CommandList } from "./CommandList";
 import { HelpList } from "./HelpList";
 import { SpecialCommandOutputTokens } from "~/types";
-import type { Command } from "~/types";
+import type { Command, CommandHistoryItem } from "~/types";
 import { Title } from "~/sections/Home/components/Title";
-
-interface CommandHistoryItem {
-  command: string;
-  output: string;
-  error: string;
-}
 
 interface FullscreenTerminalProps {
   commandHistory: CommandHistoryItem[];
