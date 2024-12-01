@@ -22,8 +22,8 @@ export const CommandExample = ({
       <button
         style={{ cursor: "pointer" }}
         className={cn(
-          isTerminalCommand && "hover:text-green-500",
-          isGoToSiteCommand && "hover:text-blue-500"
+          isTerminalCommand && "hover:text-[#A6E22E]",
+          isGoToSiteCommand && "hover:text-[#66D9EF]"
         )}
         onClick={() => {
           setCommand(cmd.command);
