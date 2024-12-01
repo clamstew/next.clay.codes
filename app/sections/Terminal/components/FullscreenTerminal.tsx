@@ -4,6 +4,7 @@ import { CommandOutput } from "../../Home/components/CommandOutput";
 import { allCommands } from "~/components/constants";
 import { CommandList } from "./CommandList";
 import { HelpList } from "./HelpList";
+import { SpecialCommandOutputTokens } from "~/types";
 import type { Command } from "~/types";
 import { Title } from "~/sections/Home/components/Title";
 
@@ -63,12 +64,12 @@ export function FullscreenTerminal({
         </div>
 
         {/* Current Command Output */}
-        {commandOutput === "::show-command-list::" ? (
+        {commandOutput === SpecialCommandOutputTokens.ShowCommandList ? (
           <CommandList
             commands={[...Object.values(allCommands)]}
             onCommandClick={handleCommandClick}
           />
-        ) : commandOutput === "::show-help-list::" ? (
+        ) : commandOutput === SpecialCommandOutputTokens.ShowHelpList ? (
           <HelpList
             commands={terminalCommands}
             onCommandClick={handleCommandClick}
