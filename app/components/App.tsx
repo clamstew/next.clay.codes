@@ -12,6 +12,7 @@ import { CommandList } from "../sections/Terminal/components/CommandList";
 import { HelpList } from "../sections/Terminal/components/HelpList";
 import { SpecialCommandOutputTokens } from "../types";
 import useCliState from "~/shared/utils/hooks/use-cli-state";
+import { RmrfFullscreenOutput } from "~/shared/components/RmrfFullscreenOutput";
 
 export const updateCommandPromptValue = (
   commandPromptRef: React.RefObject<HTMLInputElement>,
@@ -51,14 +52,11 @@ function App() {
 
   // TODO: remove this and set state in runCommand
   if (command === "rm -rf") {
-    return (
-      <div className="bg-black text-white text-left w-full mb-[30px] absolute top-0 left-0 h-full flex items-center justify-center text-[40px]">
-        💥 Oops! 🤐
-      </div>
-    );
+    return <RmrfFullscreenOutput />;
   }
 
   console.log("commandOutput", commandOutput);
+  console.log("commandError", commandError);
 
   if (isFullscreenTerminal) {
     return (
