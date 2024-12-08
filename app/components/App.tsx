@@ -13,6 +13,9 @@ import { HelpList } from "../sections/Terminal/components/HelpList";
 import { SpecialCommandOutputTokens } from "../types";
 import useCliState from "~/shared/utils/hooks/use-cli-state";
 import { RmrfFullscreenOutput } from "~/shared/components/RmrfFullscreenOutput";
+import { json } from "@remix-run/node";
+import type { LoaderFunctionArgs } from "@remix-run/node";
+// import { getI18nInstance } from "~/utils/i18n";
 
 export const updateCommandPromptValue = (
   commandPromptRef: React.RefObject<HTMLInputElement>,
@@ -21,6 +24,18 @@ export const updateCommandPromptValue = (
   if (commandPromptRef.current) {
     commandPromptRef.current.value = value;
   }
+};
+
+export const loader = async ({ request }: LoaderFunctionArgs) => {
+  // const url = new URL(request.url);
+  // const searchParams = new URLSearchParams(url.search);
+  // const command = searchParams.get("command") || "";
+  const { i18nInstance } = await request.json();
+  const promptPlaceholder = i18nInstance.t("terminal.promptPlaceholder") || "";
+
+  return json({
+    serverStrings: { promptPlaceholder: promptPlaceholder ?? "NOT_FOUND" },
+  });
 };
 
 function App() {

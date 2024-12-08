@@ -1,5 +1,8 @@
 import { useEffect } from "react";
 import cn from "classnames";
+import { useTranslation } from "react-i18next";
+import { useLoaderData } from "@remix-run/react";
+import { loader } from "~/components/App";
 
 interface CommandInputProps {
   commandPromptRef: React.RefObject<HTMLInputElement>;
@@ -16,6 +19,12 @@ export const CommandInput = ({
   commandError,
   isFullscreenTerminal = false,
 }: CommandInputProps) => {
+  const loaderData = useLoaderData<typeof loader>();
+  const { t, ready } = useTranslation("common");
+  const promptPlaceholder = ready
+    ? t("terminal.promptPlaceholder")
+    : loaderData.serverStrings.promptPlaceholder;
+
   useEffect(() => {
     commandPromptRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [commandOutput, commandError, commandPromptRef]);
@@ -38,7 +47,7 @@ export const CommandInput = ({
           autoCorrect="off"
           autoCapitalize="off"
           onChange={(e) => setCommand(e.target.value)}
-          placeholder="run a command ..."
+          placeholder={promptPlaceholder}
           className={cn(
             "inline-block bg-[#282c34] text-white border-none outline-none w-full [@media(min-width:600px)]:w-[500px] h-[46px] text-[30px] md:max-w-[94%]",
             {

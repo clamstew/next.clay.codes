@@ -11,16 +11,15 @@ import {
 import { useChangeLanguage } from "remix-i18next/react";
 import { useTranslation } from "react-i18next";
 import "~/styles/tailwind.css";
-import getI18nInstance from "./utils/i18n";
+import { getI18nInstance } from "./utils/i18n";
+
+getI18nInstance("en");
 
 export async function loader({ request }: { request: Request }) {
   const locale = request.headers.get("Accept-Language")?.split(",")[0] || "en";
 
   return json({ locale });
 }
-
-// Initialize i18n instance
-getI18nInstance("en");
 
 export default function App() {
   const { locale } = useLoaderData<typeof loader>();
