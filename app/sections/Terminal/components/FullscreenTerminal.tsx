@@ -16,6 +16,7 @@ interface FullscreenTerminalProps {
   commandOutput: string;
   terminalCommands: Record<string, Command>;
   setIsFullscreenTerminal: (isFullscreenTerminal: boolean) => void;
+  setCommandOutput: (commandOutput: string) => void;
 }
 
 export function FullscreenTerminal({
@@ -24,6 +25,7 @@ export function FullscreenTerminal({
   setCommand,
   commandError,
   commandOutput,
+  setCommandOutput,
   terminalCommands,
   setIsFullscreenTerminal,
 }: FullscreenTerminalProps) {
@@ -40,7 +42,14 @@ export function FullscreenTerminal({
       <div className="absolute top-0 right-0 z-10">
         <Title
           isFullscreenTerminal={true}
-          setIsFullscreenTerminal={setIsFullscreenTerminal}
+          // setIsFullscreenTerminal={setIsFullscreenTerminal}
+          onTitleClick={() => {
+            // assume is fullscreen terminal
+            // and we need to clear the latest command output
+            // and set the fullscreen terminal to false
+            setCommandOutput("");
+            setIsFullscreenTerminal(false);
+          }}
         />
       </div>
       <div className="min-h-screen bg-black p-4 text-green-500 font-mono">

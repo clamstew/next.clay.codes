@@ -29,6 +29,7 @@ function App() {
     command,
     commandError,
     commandOutput,
+    setCommandOutput,
     commandHistory,
     isFullscreenTerminal,
     setIsFullscreenTerminal,
@@ -68,6 +69,7 @@ function App() {
         commandOutput={commandOutput}
         terminalCommands={terminalCommands}
         setIsFullscreenTerminal={setIsFullscreenTerminal}
+        setCommandOutput={setCommandOutput}
       />
     );
   }
@@ -82,8 +84,13 @@ function App() {
     <Frame>
       {isFullscreenTerminal && <div>Fullscreen mode activated.</div>}
       <Title
-        isFullscreenTerminal={false}
-        setIsFullscreenTerminal={setIsFullscreenTerminal}
+        isFullscreenTerminal={isFullscreenTerminal}
+        onTitleClick={() => {
+          // if (isFullscreenTerminal) {
+          //   setCommandOutput("");
+          // }
+          setIsFullscreenTerminal(!isFullscreenTerminal);
+        }}
       />
 
       <CommandInput
