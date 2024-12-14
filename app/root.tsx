@@ -1,4 +1,4 @@
-import { json } from "@remix-run/node";
+import { json } from "@netlify/remix-runtime";
 import {
   Links,
   Meta,

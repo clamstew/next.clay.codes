@@ -11,4 +11,17 @@ export default defineConfig({
       "~": resolve(__dirname, "./app"),
     },
   },
+  // build: {
+  //   ssr: true,
+  //   rollupOptions: {
+  //     external: ["fs", "path", "crypto"],
+  //   },
+  // },
+  ssr: {
+    noExternal: [
+      "@remix-run/node",
+      "remix-i18next",
+      "@remix-run/server-runtime",
+    ],
+  },
 });
