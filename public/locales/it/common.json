@@ -1,0 +1,42 @@
+{
+  "commands": {
+    "history": {
+      "title": "Cronologia Comandi",
+      "description": "Mostra i comandi eseguiti in precedenza"
+    },
+    "fullscreen": {
+      "title": "Modalità Schermo Intero",
+      "description": "Entra in modalità schermo intero"
+    },
+    "minimize": {
+      "title": "Minimizza",
+      "description": "Esci dalla modalità schermo intero"
+    },
+    "terminal": {
+      "title": "Modalità Terminale",
+      "description": "Entra in modalità terminale a schermo intero"
+    },
+    "clear": {
+      "title": "Pulisci Schermo",
+      "description": "Pulisci lo schermo del terminale"
+    },
+    "exit": {
+      "title": "Esci",
+      "description": "Esci dalla modalità terminale"
+    },
+    "compgen": {
+      "title": "Elenca Comandi",
+      "description": "Mostra tutti i comandi disponibili"
+    },
+    "help": {
+      "title": "Aiuto",
+      "description": "Mostra informazioni di aiuto per i comandi"
+    }
+  },
+  "terminal": {
+    "fullscreen": "Modalità schermo intero attivata.",
+    "minimize": "Modalità minimizzata attivata.",
+    "postFullscreenActivated": "Modalità terminale attivata. Premi ESC per uscire dallo schermo intero. <br /><br />Digita 'exit' per uscire dalla modalità terminale, ma rimanere a schermo intero. <br /><br />'clear' è un buon comando di interruzione.",
+    "commandNotFound": "bash: comando non trovato: {{command}}"
+  }
+}

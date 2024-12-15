@@ -7,6 +7,7 @@ import { HelpList } from "./HelpList";
 import { SpecialCommandOutputTokens } from "~/types";
 import type { Command, CommandHistoryItem } from "~/types";
 import { Title } from "~/sections/Home/components/Title";
+// import { useTranslation } from "react-i18next";
 
 interface FullscreenTerminalProps {
   commandHistory: CommandHistoryItem[];
@@ -29,6 +30,8 @@ export function FullscreenTerminal({
   terminalCommands,
   setIsFullscreenTerminal,
 }: FullscreenTerminalProps) {
+  // const { t } = useTranslation("common");
+
   const handleCommandClick = (command: string) => {
     setCommand(command);
     if (commandPromptRef.current) {
@@ -87,6 +90,12 @@ export function FullscreenTerminal({
           setCommand={setCommand}
           isFullscreenTerminal={true}
         />
+
+        {/* <div
+          dangerouslySetInnerHTML={{
+            __html: t("terminal.postFullscreenActivated"),
+          }}
+        /> */}
       </div>
     </>
   );
