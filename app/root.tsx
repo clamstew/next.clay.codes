@@ -1,4 +1,4 @@
-import { json } from "@netlify/remix-runtime";
+// import { json } from "@netlify/remix-runtime";
 import {
   Links,
   Meta,
@@ -11,16 +11,20 @@ import {
 import { useChangeLanguage } from "remix-i18next/react";
 import { useTranslation } from "react-i18next";
 import "~/styles/tailwind.css";
-import getI18nInstance from "./utils/i18n";
+// import getI18nInstance from "./utils/i18n";
 
 export async function loader({ request }: { request: Request }) {
   const locale = request.headers.get("Accept-Language")?.split(",")[0] || "en";
 
-  return json({ locale });
+  // Initialize i18n instance with detected locale
+  // await getI18nInstance(locale);
+  // await i18n.init(); // Ensure initialization is complete
+
+  return { locale };
 }
 
 // Initialize i18n instance
-getI18nInstance("en");
+// getI18nInstance("en");
 
 export default function App() {
   const { locale } = useLoaderData<typeof loader>();
@@ -50,11 +54,12 @@ export default function App() {
 
 export function ErrorBoundary() {
   const error = useRouteError();
+  const { i18n } = useTranslation();
   console.error(error);
 
   // TODO: add error handling dynamic lang vs lang=en
   return (
-    <html lang="en">
+    <html lang={i18n.language} dir={i18n.dir()}>
       <head>
         <meta charSet="utf-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />

@@ -1,4 +1,38 @@
 {
+  "commands": {
+    "history": {
+      "title": "Command History",
+      "description": "Show previously executed commands"
+    },
+    "fullscreen": {
+      "title": "Fullscreen Mode",
+      "description": "Enter fullscreen mode"
+    },
+    "minimize": {
+      "title": "Minimize",
+      "description": "Exit fullscreen mode"
+    },
+    "terminal": {
+      "title": "Terminal Mode",
+      "description": "Enter terminal mode with fullscreen"
+    },
+    "clear": {
+      "title": "Clear Screen",
+      "description": "Clear the terminal screen"
+    },
+    "exit": {
+      "title": "Exit",
+      "description": "Exit terminal mode"
+    },
+    "compgen": {
+      "title": "List Commands",
+      "description": "Show all available commands"
+    },
+    "help": {
+      "title": "Help",
+      "description": "Show help information for commands"
+    }
+  },
   "terminal": {
     "fullscreen": "Fullscreen mode activated.",
     "minimize": "Minimized mode activated.",

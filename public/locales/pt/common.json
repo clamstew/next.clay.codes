@@ -1,0 +1,42 @@
+{
+  "commands": {
+    "history": {
+      "title": "Histórico de Comandos",
+      "description": "Mostrar comandos executados anteriormente"
+    },
+    "fullscreen": {
+      "title": "Modo Tela Cheia",
+      "description": "Entrar no modo tela cheia"
+    },
+    "minimize": {
+      "title": "Minimizar",
+      "description": "Sair do modo tela cheia"
+    },
+    "terminal": {
+      "title": "Modo Terminal",
+      "description": "Entrar no modo terminal em tela cheia"
+    },
+    "clear": {
+      "title": "Limpar Tela",
+      "description": "Limpar a tela do terminal"
+    },
+    "exit": {
+      "title": "Sair",
+      "description": "Sair do modo terminal"
+    },
+    "compgen": {
+      "title": "Listar Comandos",
+      "description": "Mostrar todos os comandos disponíveis"
+    },
+    "help": {
+      "title": "Ajuda",
+      "description": "Mostrar informações de ajuda para comandos"
+    }
+  },
+  "terminal": {
+    "fullscreen": "Modo tela cheia ativado.",
+    "minimize": "Modo minimizado ativado.",
+    "postFullscreenActivated": "Modo terminal ativado. Pressione ESC para sair da tela cheia. <br /><br />Digite 'exit' para sair do modo terminal, mas permanecer em tela cheia. <br /><br />'clear' é um bom comando para abortar.",
+    "commandNotFound": "bash: comando não encontrado: {{command}}"
+  }
+}
