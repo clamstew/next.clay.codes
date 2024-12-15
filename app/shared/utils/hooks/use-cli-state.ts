@@ -7,7 +7,6 @@ import { updateCommandPromptValue } from "~/components/App";
 import { getMatchingCommands } from "../commands-utils";
 import { delayOpenSite, safeExitFullscreen } from "../browser";
 import { useTranslation } from "react-i18next";
-import { useCommandTranslation } from "./use-command-translation";
 
 const detectMatchingCommandFound = (
   matchingCommands: string[],
@@ -53,7 +52,6 @@ const scrollToCommandPrompt = (
 
 function useCliState() {
   const { t } = useTranslation("common");
-  const { translateCommand } = useCommandTranslation();
 
   const commandPromptRef = useRef<HTMLInputElement>(null);
   const [command, setCommand] = useState("");
@@ -297,7 +295,6 @@ function useCliState() {
     tryAgain,
     matchingCommandTyped,
     commandsThatMatchPartialCommand,
-    commands: commandsThatMatchPartialCommand.map(translateCommand),
   };
 }
 

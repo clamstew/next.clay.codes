@@ -1,6 +1,5 @@
 import type { Command } from "~/types";
 import cn from "classnames";
-import { useCommandTranslation } from "~/shared/utils/hooks/use-command-translation";
 
 interface CommandExampleProps {
   cmd: Command;
@@ -15,13 +14,9 @@ export const CommandExample = ({
   setCommand,
   commandPromptRef,
 }: CommandExampleProps) => {
-  const { translateCommand } = useCommandTranslation();
-  const translatedCommand = translateCommand(cmd);
-  const prefix = translatedCommand?.emoji
-    ? `${translatedCommand.emoji}    `
-    : `${ARROW_EMOJI}   `;
-  const isTerminalCommand = translatedCommand.type === "terminal";
-  const isGoToSiteCommand = translatedCommand.type === "webpage-shortcut";
+  const prefix = cmd?.emoji ? `${cmd.emoji}    ` : `${ARROW_EMOJI}   `;
+  const isTerminalCommand = cmd.type === "terminal";
+  const isGoToSiteCommand = cmd.type === "webpage-shortcut";
   return (
     <li>
       <button
@@ -31,23 +26,23 @@ export const CommandExample = ({
           isGoToSiteCommand && "hover:text-[#66D9EF]"
         )}
         onClick={() => {
-          setCommand(translatedCommand.command);
+          setCommand(cmd.command);
           if (commandPromptRef.current) {
-            commandPromptRef.current.value = translatedCommand.command;
+            commandPromptRef.current.value = cmd.command;
           }
         }}
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") {
-            setCommand(translatedCommand.command);
+            setCommand(cmd.command);
             if (commandPromptRef.current) {
-              commandPromptRef.current.value = translatedCommand.command;
+              commandPromptRef.current.value = cmd.command;
             }
           }
         }}
-        aria-label={translatedCommand.description}
-        title={translatedCommand.description}
+        aria-label={cmd.description}
+        title={cmd.description}
       >
-        {`${prefix}${translatedCommand.command}`}
+        {`${prefix}${cmd.command}`}
       </button>
     </li>
   );
