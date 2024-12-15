@@ -6,6 +6,9 @@ import { resolve } from "path";
 
 export default defineConfig({
   plugins: [remix(), netlifyPlugin(), tsconfigPaths()],
+  // optimizeDeps: {
+  //   include: ["@remix-run/node"],
+  // },
   resolve: {
     alias: {
       "~": resolve(__dirname, "./app"),
@@ -20,8 +23,13 @@ export default defineConfig({
   ssr: {
     noExternal: [
       "@remix-run/node",
-      "remix-i18next",
       "@remix-run/server-runtime",
+      "@remix-run/react",
+      "remix-i18next",
+      "react-i18next",
+      "i18next",
+      "i18next-browser-languagedetector",
+      "i18next-http-backend",
     ],
   },
 });
