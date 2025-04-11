@@ -6,20 +6,14 @@ import { resolve } from "path";
 
 export default defineConfig({
   plugins: [netlifyPlugin(), remix(), tsconfigPaths()],
-  // optimizeDeps: {
-  //   include: ["@remix-run/node"],
-  // },
   resolve: {
     alias: {
       "~": resolve(__dirname, "./app"),
     },
   },
-  // build: {
-  //   ssr: true,
-  //   rollupOptions: {
-  //     external: ["fs", "path", "crypto"],
-  //   },
-  // },
+  build: {
+    outDir: "dist",
+  },
   ssr: {
     noExternal: ["@remix-run/react", "@remix-run/server-runtime"],
   },

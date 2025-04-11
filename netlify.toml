@@ -1,9 +1,10 @@
 [build]
-  command = "npm run build"
-  publish = "public"
+  command = "pnpm build"
+  publish = "dist"
+  functions = "netlify/functions"
 
 [dev]
-  command = "npm run dev"
+  command = "pnpm dev"
   port = 3000
 
 # Remove the redirects section if using edge functions 
