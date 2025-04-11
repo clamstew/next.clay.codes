@@ -7,4 +7,7 @@
   command = "pnpm dev"
   port = 3000
 
+[build.environment]
+  NODE_VERSION = "20"
+
 # Remove the redirects section if using edge functions 
