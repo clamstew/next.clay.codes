@@ -10,12 +10,11 @@
 [build.environment]
   NODE_VERSION = "20"
   NPM_FLAGS = "--legacy-peer-deps"
-
-# Remove the redirects section if using edge functions 
+  NODE_ENV = "production"
 
 [[edge_functions]]
   function = "remix-server"
   path = "/*"
 
 [build.processing.ignore]
-  files = ["build/server/**"] 
+  files = ["build/server/**"]
