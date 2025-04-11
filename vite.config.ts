@@ -14,6 +14,12 @@ export default defineConfig({
   build: {
     outDir: "dist",
     emptyOutDir: true,
+    manifest: true,
+    rollupOptions: {
+      input: {
+        main: resolve(__dirname, "app/entry.client.tsx"),
+      },
+    },
   },
   ssr: {
     noExternal: ["@remix-run/react", "@remix-run/server-runtime"],

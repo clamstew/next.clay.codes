@@ -9,5 +9,6 @@
 
 [build.environment]
   NODE_VERSION = "20"
+  NPM_FLAGS = "--legacy-peer-deps"
 
 # Remove the redirects section if using edge functions 
