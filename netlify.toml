@@ -14,5 +14,8 @@
 # Remove the redirects section if using edge functions 
 
 [[edge_functions]]
-  function = "server"
-  path = "/*" 
+  function = "remix-server"
+  path = "/*"
+
+[build.processing.ignore]
+  files = ["build/server/**"] 
