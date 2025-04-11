@@ -4,7 +4,7 @@ export default {
   serverModuleFormat: "esm",
   serverPlatform: "neutral",
   // Use the Netlify Edge adapter
-  server: "./server.js",
+  server: "./server.ts",
   // ... other config options
   future: {
     v3_fetcherPersist: true,
