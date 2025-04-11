@@ -1,11 +1,11 @@
-import { vitePlugin as remix } from "@remix-run/dev";
 import { defineConfig } from "vite";
+import { vitePlugin as remix } from "@remix-run/dev";
 import tsconfigPaths from "vite-tsconfig-paths";
 import { netlifyPlugin } from "@netlify/remix-edge-adapter/plugin";
 import { resolve } from "path";
 
 export default defineConfig({
-  plugins: [remix(), netlifyPlugin(), tsconfigPaths()],
+  plugins: [netlifyPlugin(), remix(), tsconfigPaths()],
   // optimizeDeps: {
   //   include: ["@remix-run/node"],
   // },
@@ -21,15 +21,6 @@ export default defineConfig({
   //   },
   // },
   ssr: {
-    noExternal: [
-      "@remix-run/node",
-      "@remix-run/server-runtime",
-      "@remix-run/react",
-      "remix-i18next",
-      "react-i18next",
-      "i18next",
-      "i18next-browser-languagedetector",
-      "i18next-http-backend",
-    ],
+    noExternal: ["@remix-run/react", "@remix-run/server-runtime"],
   },
 });
